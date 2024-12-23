@@ -1,0 +1,3 @@
+local _, ADDON = ...
+
+ADDON.L = {}

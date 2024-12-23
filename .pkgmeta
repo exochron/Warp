@@ -1,0 +1,8 @@
+ignore:
+    - LICENSE
+    - DevZone
+    - Images
+    - README.md
+    - CHANGELOG.md
+
+license-output: LICENSE
