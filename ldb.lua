@@ -1,5 +1,7 @@
 local ADDON_NAME, ADDON = ...
 
+local tFilter = tFilter
+
 local hearthstoneButton
 local menuActionButton
 local function buildMenuActionButton()
@@ -17,15 +19,14 @@ local function generateTeleportMenu(_, root)
     root:SetTag(ADDON_NAME.."-LDB-Teleport")
     root:SetScrollMode(GetScreenHeight() - 100)
 
-    root:CreateTitle("Teleports")
+    --root:CreateTitle("Teleports")
 
-    local function buildToyEntry(itemId, location)
-        local icon = C_Item.GetItemIconByID(itemId)
+    local function buildEntry(type, id, icon, location, tooltipSetter, hasCooldown)
         local element = root:CreateButton("|T" .. icon .. ":0|t "..location)
         element:SetOnEnter(function(frame)
-            menuActionButton:SetAttribute("type", "toy")
-            menuActionButton:SetAttribute("typerelease", "toy")
-            menuActionButton:SetAttribute("toy", itemId)
+            menuActionButton:SetAttribute("type", type)
+            menuActionButton:SetAttribute("typerelease", type)
+            menuActionButton:SetAttribute(type, id)
             menuActionButton:SetParent(frame)
             menuActionButton:SetAllPoints(frame)
             menuActionButton:SetFrameStrata("FULLSCREEN_DIALOG")
@@ -35,15 +36,14 @@ local function generateTeleportMenu(_, root)
             GameTooltip:SetOwner(frame, "ANCHOR_NONE")
             GameTooltip:SetPoint("TOPLEFT", frame, "TOPRIGHT")
             GameTooltip:ClearLines()
-            GameTooltip:SetToyByItemID(itemId)
+            tooltipSetter(GameTooltip, id)
             GameTooltip:Show()
         end)
         element:SetOnLeave(function()
             GameTooltip:Hide()
             menuActionButton:Hide()
         end)
-        local cooldownTimer = C_Container.GetItemCooldown(itemId)
-        if cooldownTimer > 0 then
+        if hasCooldown then
             element:AddInitializer(function(button)
                 button.fontString:SetAlpha(0.5)
             end)
@@ -51,36 +51,39 @@ local function generateTeleportMenu(_, root)
         return element
     end
 
-    local function buildItemEntry(itemId, location)
-        local icon = C_Item.GetItemIconByID(itemId)
-        local element = root:CreateButton("|T" .. icon .. ":0|t "..location)
-        element:SetOnEnter(function(frame)
-            menuActionButton:SetAttribute("type", "item")
-            menuActionButton:SetAttribute("typerelease", "item")
-            menuActionButton:SetAttribute("item", itemId)
-            menuActionButton:SetParent(frame)
-            menuActionButton:SetAllPoints(frame)
-            menuActionButton:SetFrameStrata("FULLSCREEN_DIALOG")
-            menuActionButton:SetFrameLevel(600)
-            menuActionButton:Show()
+    local function buildToyEntry(itemId, location)
+        return buildEntry(
+            "toy",
+            itemId,
+            C_Item.GetItemIconByID(itemId),
+            location,
+            GameTooltip.SetToyByItemID,
+            C_Container.GetItemCooldown(itemId) > 0
+        )
+    end
 
-            GameTooltip:SetOwner(frame, "ANCHOR_NONE")
-            GameTooltip:SetPoint("TOPLEFT", frame, "TOPRIGHT")
-            GameTooltip:ClearLines()
-            GameTooltip:SetToyByItemID(itemId)
-            GameTooltip:Show()
-        end)
-        element:SetOnLeave(function()
-            GameTooltip:Hide()
-            menuActionButton:Hide()
-        end)
-        local cooldownTimer = C_Container.GetItemCooldown(itemId)
-        if cooldownTimer > 0 then
-            element:AddInitializer(function(button)
-                button.fontString:SetAlpha(0.5)
-            end)
+    local function buildItemEntry(itemId, location)
+        return buildEntry(
+            "item",
+            itemId,
+            C_Item.GetItemIconByID(itemId),
+            location,
+            GameTooltip.SetItemByID,
+            C_Container.GetItemCooldown(itemId) > 0
+        )
+    end
+
+    local function buildSpellEntry(spellId, location)
+        if IsSpellKnown(spellId) then
+            return buildEntry(
+                "spell",
+                spellId,
+                C_Spell.GetSpellTexture(spellId),
+                location,
+                GameTooltip.SetSpellByID,
+                not C_Spell.IsSpellUsable(spellId)
+            )
         end
-        return element
     end
 
     -- Hearthstone
@@ -95,6 +98,14 @@ local function generateTeleportMenu(_, root)
     root:QueueSpacer()
 
     -- season dungeons
+    local seasonSpells = tFilter(ADDON.db, function(row)
+        return row.category == ADDON.Category.SeasonInstance and row.spell
+    end, true)
+    table.sort(seasonSpells, function(a, b) return GetRealZoneText(a.instance) < GetRealZoneText(b.instance) end)
+    for _, row in ipairs(seasonSpells) do
+        buildSpellEntry(row.spell, GetRealZoneText(row.instance))
+    end
+    root:QueueSpacer()
 
     -- continents
 end
@@ -123,13 +134,10 @@ local function buildHearthstoneButton()
     local button = CreateFrame("Button", nil, nil, "SecureActionButtonTemplate")
 
     local function GetRandomHearthstoneToy()
-        local stones = {}
-
-        for _, row in ipairs(ADDON.db) do
-            if row.category == ADDON.Category.Hearthstone and row.toy and PlayerHasToy(row.toy) then
-                stones[#stones+1] = row.toy
-            end
-        end
+        local stones = tFilter(ADDON.db, function(row)
+            return row.category == ADDON.Category.Hearthstone and row.toy and PlayerHasToy(row.toy)
+        end, true)
+        stones = TableUtil.Transform(stones, function(row) return row.toy end)
 
         -- avoid last used hearthstone
         if #stones > 1 and button:GetAttribute("toy") then
