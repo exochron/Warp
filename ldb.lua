@@ -59,7 +59,7 @@ local function generateTeleportMenu(_, root)
             C_Item.GetItemIconByID(itemId),
             location,
             GameTooltip.SetToyByItemID,
-            C_Container.GetItemCooldown(itemId) > 0
+                not C_ToyBox.IsToyUsable(itemId) or C_Container.GetItemCooldown(itemId) > 0
         )
     end
 
@@ -71,7 +71,7 @@ local function generateTeleportMenu(_, root)
             C_Item.GetItemIconByID(itemId),
             location,
             GameTooltip.SetItemByID,
-            C_Container.GetItemCooldown(itemId) > 0
+                C_Container.GetItemCooldown(itemId) > 0
         )
     end
 
@@ -85,6 +85,33 @@ local function generateTeleportMenu(_, root)
             GameTooltip.SetSpellByID,
             not C_Spell.IsSpellUsable(spellId)
         )
+    end
+
+    local function GetName(row)
+        if row.instance then
+            return GetRealZoneText(row.instance)
+        end
+        if row.map then
+            return C_Map.GetMapInfo(row.map).name
+        end
+        --if row.toy then
+        --    return C_Item.GetItemNameByID(row.toy)
+        --end
+        --if row.item then
+        --    return C_Item.GetItemNameByID(row.item)
+        --end
+        --if row.spell then
+        --    return C_Spell.GetSpellName(row.spell)
+        --end
+
+        return ""
+    end
+
+    local function SortRowsByName(list)
+        table.sort(list, function(a, b)
+            return GetName(a) < GetName(b)
+        end)
+        return list
     end
 
     -- Hearthstone
@@ -102,7 +129,7 @@ local function generateTeleportMenu(_, root)
     local seasonSpells = tFilter(ADDON.db, function(row)
         return row.category == ADDON.Category.SeasonInstance and row.spell and IsSpellKnown(row.spell)
     end, true)
-    table.sort(seasonSpells, function(a, b) return GetRealZoneText(a.instance) < GetRealZoneText(b.instance) end)
+    seasonSpells = SortRowsByName(seasonSpells)
     for _, row in ipairs(seasonSpells) do
         buildSpellEntry(root, row.spell, GetRealZoneText(row.instance))
     end
@@ -119,19 +146,18 @@ local function generateTeleportMenu(_, root)
         end
     end
     local continents = GetKeysArray(groupedByContinent)
-    table.sort(continents)
+    table.sort(continents, function(a, b) return a > b end)
     for _, continent in ipairs(continents) do
         local list = groupedByContinent[continent]
-        list = tFilter(list, function(row) return row.spell and IsSpellKnown(row.spell) end, true)
+        list = tFilter(list, function(row) return (row.spell and IsSpellKnown(row.spell)) or (row.toy and PlayerHasToy(row.toy)) end, true)
         if #list > 0 then
-            table.sort(list, function(a, b)
-                return GetRealZoneText(a.instance) < GetRealZoneText(b.instance)
-            end)
-
+            list = SortRowsByName(list)
             local continentRoot = root:CreateButton(GetRealZoneText(continent))
             for _, row in ipairs(list) do
-                if row.instance then
-                    buildSpellEntry(continentRoot, row.spell, GetRealZoneText(row.instance))
+                if row.spell then
+                    buildSpellEntry(continentRoot, row.spell, GetName(row))
+                elseif row.toy then
+                    buildToyEntry(continentRoot, row.toy, GetName(row))
                 end
             end
         end

@@ -1,13 +1,30 @@
 local _, ADDON = ...
 
 ADDON.Category = {
-    ["Hearthstone"] = 1,
-    ["SeasonInstance"] = 2,
+    Hearthstone = 1,
+    SeasonInstance = 2,
 }
 
 ADDON.db = {
+    -- see: https://warcraft.wiki.gg/wiki/UiMapID & https://warcraft.wiki.gg/wiki/InstanceID
+    --todo: various items
+    --todo: mage ports & portals
+    --todo: druid ports
 
-    --see: https://warcraft.wiki.gg/wiki/InstanceID
+    --engineer items
+    {toy=18984, map=83, continent=1}, -- Dimensional Ripper - Everlook
+    {toy=18986, map=71, continent=1}, -- Ultrasafe Transporter: Gadgetzan
+    {toy=30542, map=109, continent=530}, -- Dimensional Ripper - Area 52
+    {toy=30544, map=105, continent=530}, -- Ultrasafe Transporter: Toshley's Station
+    {toy=48933, map=113, continent=571}, -- Wormhole Generator: Northrend
+    {toy=87215, map=424, continent=870}, -- Wormhole Generator: Pandaria
+    {toy=112059, map=572, continent=1116}, -- Wormhole Centrifuge
+    {toy=151652, map=994, continent=1669}, -- Wormhole Generator: Argus
+    {toy=168807, map=992, continent=1643}, -- Wormhole Generator: Kul Tiras
+    {toy=168808, map=991, continent=1642}, -- Wormhole Generator: Zandalar
+    {toy=172924, map=1550, continent=2222}, -- Wormhole Generator: Shadowlands
+    {toy=198156, map=1978, continent=2444}, -- Wormhole Generator: Dragon Isles
+    {toy=221966, map=2274, continent=2601}, -- Wormhole Generator: Khaz Algar
 
     -- seasonal dungeon port
     {spell = 445416, instance = 2669, continent = 2601, category = ADDON.Category.SeasonInstance}, -- City of Threads
