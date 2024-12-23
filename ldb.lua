@@ -21,7 +21,7 @@ local function generateTeleportMenu(_, root)
 
     --root:CreateTitle("Teleports")
 
-    local function buildEntry(type, id, icon, location, tooltipSetter, hasCooldown)
+    local function buildEntry(root, type, id, icon, location, tooltipSetter, hasCooldown)
         local element = root:CreateButton("|T" .. icon .. ":0|t "..location)
         element:SetOnEnter(function(frame)
             menuActionButton:SetAttribute("type", type)
@@ -30,7 +30,7 @@ local function generateTeleportMenu(_, root)
             menuActionButton:SetParent(frame)
             menuActionButton:SetAllPoints(frame)
             menuActionButton:SetFrameStrata("FULLSCREEN_DIALOG")
-            menuActionButton:SetFrameLevel(600)
+            menuActionButton:SetFrameLevel(10000)
             menuActionButton:Show()
 
             GameTooltip:SetOwner(frame, "ANCHOR_NONE")
@@ -51,8 +51,9 @@ local function generateTeleportMenu(_, root)
         return element
     end
 
-    local function buildToyEntry(itemId, location)
+    local function buildToyEntry(root, itemId, location)
         return buildEntry(
+                root,
             "toy",
             itemId,
             C_Item.GetItemIconByID(itemId),
@@ -62,8 +63,9 @@ local function generateTeleportMenu(_, root)
         )
     end
 
-    local function buildItemEntry(itemId, location)
+    local function buildItemEntry(root, itemId, location)
         return buildEntry(
+                root,
             "item",
             itemId,
             C_Item.GetItemIconByID(itemId),
@@ -73,41 +75,67 @@ local function generateTeleportMenu(_, root)
         )
     end
 
-    local function buildSpellEntry(spellId, location)
-        if IsSpellKnown(spellId) then
-            return buildEntry(
-                "spell",
-                spellId,
-                C_Spell.GetSpellTexture(spellId),
-                location,
-                GameTooltip.SetSpellByID,
-                not C_Spell.IsSpellUsable(spellId)
-            )
-        end
+    local function buildSpellEntry(root, spellId, location)
+        return buildEntry(
+                root,
+            "spell",
+            spellId,
+            C_Spell.GetSpellTexture(spellId),
+            location,
+            GameTooltip.SetSpellByID,
+            not C_Spell.IsSpellUsable(spellId)
+        )
     end
 
     -- Hearthstone
     if hearthstoneButton:GetAttribute("toy") then
-        buildToyEntry(hearthstoneButton:GetAttribute("toy"), GetBindLocation()):SetResponder(function()
+        buildToyEntry(root, hearthstoneButton:GetAttribute("toy"), GetBindLocation()):SetResponder(function()
             hearthstoneButton:ShuffleHearthstone()
             return MenuResponse.CloseAll
         end)
     else
-        buildItemEntry(hearthstoneButton:GetAttribute("item"), GetBindLocation())
+        buildItemEntry(root, hearthstoneButton:GetAttribute("item"), GetBindLocation())
     end
     root:QueueSpacer()
 
     -- season dungeons
     local seasonSpells = tFilter(ADDON.db, function(row)
-        return row.category == ADDON.Category.SeasonInstance and row.spell
+        return row.category == ADDON.Category.SeasonInstance and row.spell and IsSpellKnown(row.spell)
     end, true)
     table.sort(seasonSpells, function(a, b) return GetRealZoneText(a.instance) < GetRealZoneText(b.instance) end)
     for _, row in ipairs(seasonSpells) do
-        buildSpellEntry(row.spell, GetRealZoneText(row.instance))
+        buildSpellEntry(root, row.spell, GetRealZoneText(row.instance))
     end
     root:QueueSpacer()
 
     -- continents
+    local groupedByContinent = {}
+    for _, row in ipairs(ADDON.db) do
+        if row.continent then
+            if not groupedByContinent[row.continent] then
+                groupedByContinent[row.continent] = {}
+            end
+            table.insert(groupedByContinent[row.continent], row)
+        end
+    end
+    local continents = GetKeysArray(groupedByContinent)
+    table.sort(continents)
+    for _, continent in ipairs(continents) do
+        local list = groupedByContinent[continent]
+        list = tFilter(list, function(row) return row.spell and IsSpellKnown(row.spell) end, true)
+        if #list > 0 then
+            table.sort(list, function(a, b)
+                return GetRealZoneText(a.instance) < GetRealZoneText(b.instance)
+            end)
+
+            local continentRoot = root:CreateButton(GetRealZoneText(continent))
+            for _, row in ipairs(list) do
+                if row.instance then
+                    buildSpellEntry(continentRoot, row.spell, GetRealZoneText(row.instance))
+                end
+            end
+        end
+    end
 end
 
 local function OpenMenu(anchorSource, generator)
