@@ -1,95 +1,118 @@
 local _, ADDON = ...
 
+-- see: https://warcraft.wiki.gg/wiki/UiMapID & https://warcraft.wiki.gg/wiki/InstanceID
+
+local EASTERN_KINGDOMS = 0
+local KALIMDOR = 1
+local OUTLAND = 530
+local NORTHREND = 571
+local PANDARIA = 870
+local DRAENOR = 1116
+local BROKEN_ISLES = 1220
+local ARGUS = 1669
+local ZANDALAR = 1642
+local KUL_TIRAS = 1643
+local SHADOWLANDS = 2222
+local DRAGON_ISLES = 2444
+local KHAZ_ALGAR = 2601
+
+local isAlliance = UnitFactionGroup("player") == "Alliance"
+
 ADDON.Category = {
     Hearthstone = 1,
     SeasonInstance = 2,
 }
 
 ADDON.db = {
-    -- see: https://warcraft.wiki.gg/wiki/UiMapID & https://warcraft.wiki.gg/wiki/InstanceID
     --todo: various items
+    --todo: equipable items
     --todo: mage ports & portals
     --todo: druid ports
 
+    --various items
+    {toy = 140192, map = 626, continent = BROKEN_ISLES}, -- Dalaran Hearthstone
+    {toy = 110560, map = (isAlliance and 539 or 525), continent = DRAENOR}, -- Garrison Hearthstone
+    {item = 103678, map = 554, continent = PANDARIA}, -- Time-Lost Artifact
+
     --engineer items
-    {toy=18984, map=83, continent=1}, -- Dimensional Ripper - Everlook
-    {toy=18986, map=71, continent=1}, -- Ultrasafe Transporter: Gadgetzan
-    {toy=30542, map=109, continent=530}, -- Dimensional Ripper - Area 52
-    {toy=30544, map=105, continent=530}, -- Ultrasafe Transporter: Toshley's Station
-    {toy=48933, map=113, continent=571}, -- Wormhole Generator: Northrend
-    {toy=87215, map=424, continent=870}, -- Wormhole Generator: Pandaria
-    {toy=112059, map=572, continent=1116}, -- Wormhole Centrifuge
-    {toy=151652, map=994, continent=1669}, -- Wormhole Generator: Argus
-    {toy=168807, map=992, continent=1643}, -- Wormhole Generator: Kul Tiras
-    {toy=168808, map=991, continent=1642}, -- Wormhole Generator: Zandalar
-    {toy=172924, map=1550, continent=2222}, -- Wormhole Generator: Shadowlands
-    {toy=198156, map=1978, continent=2444}, -- Wormhole Generator: Dragon Isles
-    {toy=221966, map=2274, continent=2601}, -- Wormhole Generator: Khaz Algar
+    {toy = 18984, map = 83, continent = KALIMDOR}, -- Dimensional Ripper - Everlook
+    {toy = 18986, map = 71, continent = KALIMDOR}, -- Ultrasafe Transporter: Gadgetzan
+    {toy = 30542, map = 109, continent = OUTLAND}, -- Dimensional Ripper - Area 52
+    {toy = 30544, map = 105, continent = OUTLAND}, -- Ultrasafe Transporter: Toshley's Station
+    {toy = 48933, map = 113, continent = NORTHREND}, -- Wormhole Generator: Northrend
+    {toy = 87215, map = 424, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = 112059, map = 572, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = 151652, map = 994, continent = ARGUS}, -- Wormhole Generator: Argus
+    {toy = 168807, map = 992, continent = KUL_TIRAS}, -- Wormhole Generator: Kul Tiras
+    {toy = 168808, map = 991, continent = ZANDALAR}, -- Wormhole Generator: Zandalar
+    {toy = 172924, map = 1550, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = 198156, map = 1978, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = 221966, map = 2274, continent = KHAZ_ALGAR}, -- Wormhole Generator: Khaz Algar
 
     -- seasonal dungeon port
-    {spell = 445416, instance = 2669, continent = 2601, category = ADDON.Category.SeasonInstance}, -- City of Threads
-    {spell = 445417, instance = 2660, continent = 2601, category = ADDON.Category.SeasonInstance}, -- Ara Kara: City of Echoes
-    {spell = 354464, instance = 2290, continent = 2222, category = ADDON.Category.SeasonInstance}, -- Mists of Tirna Scithe
-    {spell = 445418, instance = 1822, continent = 1643, category = ADDON.Category.SeasonInstance}, -- Siege of Boralus
-    {spell = 464256, instance = 1822, continent = 1643, category = ADDON.Category.SeasonInstance}, -- Siege of Boralus
-    {spell = 445414, instance = 2662, continent = 2601, category = ADDON.Category.SeasonInstance}, -- The Dawnbreaker
-    {spell = 445269, instance = 2652, continent = 2601, category = ADDON.Category.SeasonInstance}, -- Stonevault
-    {spell = 445424, instance = 670, continent = 0, category = ADDON.Category.SeasonInstance}, -- Grim Batol
-    {spell = 354462, instance = 2286, continent = 2222, category = ADDON.Category.SeasonInstance}, -- Necrotic Wake
+    {spell = 445416, instance = 2669, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- City of Threads
+    {spell = 445417, instance = 2660, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- Ara Kara: City of Echoes
+    {spell = 354464, instance = 2290, continent = SHADOWLANDS, category = ADDON.Category.SeasonInstance}, -- Mists of Tirna Scithe
+    {spell = 445418, instance = 1822, continent = KUL_TIRAS, category = ADDON.Category.SeasonInstance}, -- Siege of Boralus
+    {spell = 464256, instance = 1822, continent = KUL_TIRAS, category = ADDON.Category.SeasonInstance}, -- Siege of Boralus
+    {spell = 445414, instance = 2662, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- The Dawnbreaker
+    {spell = 445269, instance = 2652, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- Stonevault
+    {spell = 445424, instance = 670, continent = EASTERN_KINGDOMS, category = ADDON.Category.SeasonInstance}, -- Grim Batol
+    {spell = 354462, instance = 2286, continent = SHADOWLANDS, category = ADDON.Category.SeasonInstance}, -- Necrotic Wake
 
     -- older dungeon portsc
-    {spell = 393273, instance = 2526, continent = 2444}, -- Algeth'ar Academy
-    {spell = 393267, instance = 2520, continent = 2444}, -- Brackenhide Hollow
-    {spell = 393283, instance = 2527, continent = 2444}, -- Halls of Infusion
-    {spell = 393276, instance = 2519, continent = 2444}, -- Neltharus
-    {spell = 393256, instance = 2521, continent = 2444}, -- Ruby Life Pools
-    {spell = 393279, instance = 2515, continent = 2444}, -- The Azure Vault
-    {spell = 393262, instance = 2516, continent = 2444}, -- The Nokhud Offensive
-    {spell = 424197, instance = 2579, continent = 2444}, -- Dawn of the Infinite
-    {spell = 432257, instance = 2569, continent = 2444}, -- Aberrus
-    {spell = 432254, instance = 2522, continent = 2444}, -- Vault of the Incarnates
-    {spell = 432258, instance = 2549, continent = 2444}, -- Amirdrassil, the Dream's Hope
-    {spell = 393222, instance = 2451, continent = 0}, -- Uldaman: Legacy of Tyr
-    {spell = 354469, instance = 2284, continent = 2222}, -- Sanguine Depths
-    {spell = 354466, instance = 2285, continent = 2222}, -- Spires of Ascension
-    {spell = 354465, instance = 2287, continent = 2222}, -- Halls of Atonement
-    {spell = 354463, instance = 2289, continent = 2222}, -- Plaguefall
-    {spell = 354468, instance = 2291, continent = 2222}, -- De Other Side
-    {spell = 354467, instance = 2293, continent = 2222}, -- Theater of Pain
-    {spell = 367416, instance = 2441, continent = 2222}, -- Tazavesh the Veiled Market
-    {spell = 373190, instance = 2296, continent = 2222}, -- Castle Nathria
-    {spell = 373191, instance = 2450, continent = 2222}, -- Sanctum of Domination
-    {spell = 373192, instance = 2481, continent = 2222}, -- Sepulcher of the First Ones
-    {spell = 410071, instance = 1754, continent = 1643}, -- Freehold
-    {spell = 424187, instance = 1763, continent = 1642}, -- Atal'Dazar
-    {spell = 373274, instance = 2097, continent = 1643}, -- Operation: Mechagon
-    {spell = 424167, instance = 1862, continent = 1643}, -- Waycrest Manor
-    {spell = 410074, instance = 1841, continent = 1642}, -- The Underrot
-    {spell = 373262, instance = 532, continent = 0}, -- Karazhan
-    {spell = 393764, instance = 1477, continent = 1220}, -- Halls of Valor
-    {spell = 393766, instance = 1571, continent = 1220}, -- Court of Stars
-    {spell = 410078, instance = 1458, continent = 1220}, -- Neltharion's Lair
-    {spell = 424153, instance = 1501, continent = 1220}, -- Black Rook Hold
-    {spell = 424163, instance = 1466, continent = 1220}, -- Darkheart Thicket
-    {spell = 159895, instance = 1175, continent = 1116}, -- Bloodmaul Slag Mines
-    {spell = 159896, instance = 1195, continent = 1116}, -- Iron Docks
-    {spell = 159897, instance = 1182, continent = 1116}, -- Auchindoun
-    {spell = 159898, instance = 1209, continent = 1116}, -- Skyreach
-    {spell = 159899, instance = 1176, continent = 1116}, -- Shadowmoon Burial Grounds
-    {spell = 159900, instance = 1208, continent = 1116}, -- Grimrail Depot
-    {spell = 159901, instance = 1279, continent = 1116}, -- The Everbloom
-    {spell = 131204, instance = 960, continent = 870}, -- Temple of the Jade Serpent
-    {spell = 131205, instance = 961, continent = 870}, -- Stormstout Brewery
-    {spell = 131206, instance = 959, continent = 870}, -- Shado-Pan Monastery
-    {spell = 131222, instance = 994, continent = 870}, -- Mogu'shan Palace
-    {spell = 131225, instance = 962, continent = 870}, -- Gate of the Setting Sun
-    {spell = 131228, instance = 1011, continent = 870}, -- Siege of Niuzao Temple
-    {spell = 410080, instance = 657, continent = 1}, -- The Vortex Pinnacle
-    {spell = 424142, instance = 643, continent = 0}, -- Throne of the Tides
-    {spell = 131229, instance = 1004, continent = 0}, -- Scarlet Monastery
-    {spell = 131231, instance = 1001, continent = 0}, -- Scarlet Halls
-    {spell = 131232, instance = 1007, continent = 0}, -- Scholomance
-    {spell = 159902, instance = 1358, continent = 0}, -- Upper Blackrock Spire
+    {spell = 393273, instance = 2526, continent = DRAGON_ISLES}, -- Algeth'ar Academy
+    {spell = 393267, instance = 2520, continent = DRAGON_ISLES}, -- Brackenhide Hollow
+    {spell = 393283, instance = 2527, continent = DRAGON_ISLES}, -- Halls of Infusion
+    {spell = 393276, instance = 2519, continent = DRAGON_ISLES}, -- Neltharus
+    {spell = 393256, instance = 2521, continent = DRAGON_ISLES}, -- Ruby Life Pools
+    {spell = 393279, instance = 2515, continent = DRAGON_ISLES}, -- The Azure Vault
+    {spell = 393262, instance = 2516, continent = DRAGON_ISLES}, -- The Nokhud Offensive
+    {spell = 424197, instance = 2579, continent = DRAGON_ISLES}, -- Dawn of the Infinite
+    {spell = 432257, instance = 2569, continent = DRAGON_ISLES}, -- Aberrus
+    {spell = 432254, instance = 2522, continent = DRAGON_ISLES}, -- Vault of the Incarnates
+    {spell = 432258, instance = 2549, continent = DRAGON_ISLES}, -- Amirdrassil, the Dream's Hope
+    {spell = 393222, instance = 2451, continent = EASTERN_KINGDOMS}, -- Uldaman: Legacy of Tyr
+    {spell = 354469, instance = 2284, continent = SHADOWLANDS}, -- Sanguine Depths
+    {spell = 354466, instance = 2285, continent = SHADOWLANDS}, -- Spires of Ascension
+    {spell = 354465, instance = 2287, continent = SHADOWLANDS}, -- Halls of Atonement
+    {spell = 354463, instance = 2289, continent = SHADOWLANDS}, -- Plaguefall
+    {spell = 354468, instance = 2291, continent = SHADOWLANDS}, -- De Other Side
+    {spell = 354467, instance = 2293, continent = SHADOWLANDS}, -- Theater of Pain
+    {spell = 367416, instance = 2441, continent = SHADOWLANDS}, -- Tazavesh the Veiled Market
+    {spell = 373190, instance = 2296, continent = SHADOWLANDS}, -- Castle Nathria
+    {spell = 373191, instance = 2450, continent = SHADOWLANDS}, -- Sanctum of Domination
+    {spell = 373192, instance = 2481, continent = SHADOWLANDS}, -- Sepulcher of the First Ones
+    {spell = 410071, instance = 1754, continent = KUL_TIRAS}, -- Freehold
+    {spell = 424187, instance = 1763, continent = ZANDALAR}, -- Atal'Dazar
+    {spell = 373274, instance = 2097, continent = KUL_TIRAS}, -- Operation: Mechagon
+    {spell = 424167, instance = 1862, continent = KUL_TIRAS}, -- Waycrest Manor
+    {spell = 410074, instance = 1841, continent = ZANDALAR}, -- The Underrot
+    {spell = 373262, instance = 532, continent = EASTERN_KINGDOMS}, -- Karazhan
+    {spell = 393764, instance = 1477, continent = BROKEN_ISLES}, -- Halls of Valor
+    {spell = 393766, instance = 1571, continent = BROKEN_ISLES}, -- Court of Stars
+    {spell = 410078, instance = 1458, continent = BROKEN_ISLES}, -- Neltharion's Lair
+    {spell = 424153, instance = 1501, continent = BROKEN_ISLES}, -- Black Rook Hold
+    {spell = 424163, instance = 1466, continent = BROKEN_ISLES}, -- Darkheart Thicket
+    {spell = 159895, instance = 1175, continent = DRAENOR}, -- Bloodmaul Slag Mines
+    {spell = 159896, instance = 1195, continent = DRAENOR}, -- Iron Docks
+    {spell = 159897, instance = 1182, continent = DRAENOR}, -- Auchindoun
+    {spell = 159898, instance = 1209, continent = DRAENOR}, -- Skyreach
+    {spell = 159899, instance = 1176, continent = DRAENOR}, -- Shadowmoon Burial Grounds
+    {spell = 159900, instance = 1208, continent = DRAENOR}, -- Grimrail Depot
+    {spell = 159901, instance = 1279, continent = DRAENOR}, -- The Everbloom
+    {spell = 131204, instance = 960, continent = PANDARIA}, -- Temple of the Jade Serpent
+    {spell = 131205, instance = 961, continent = PANDARIA}, -- Stormstout Brewery
+    {spell = 131206, instance = 959, continent = PANDARIA}, -- Shado-Pan Monastery
+    {spell = 131222, instance = 994, continent = PANDARIA}, -- Mogu'shan Palace
+    {spell = 131225, instance = 962, continent = PANDARIA}, -- Gate of the Setting Sun
+    {spell = 131228, instance = 1011, continent = PANDARIA}, -- Siege of Niuzao Temple
+    {spell = 410080, instance = 657, continent = KALIMDOR}, -- The Vortex Pinnacle
+    {spell = 424142, instance = 643, continent = EASTERN_KINGDOMS}, -- Throne of the Tides
+    {spell = 131229, instance = 1004, continent = EASTERN_KINGDOMS}, -- Scarlet Monastery
+    {spell = 131231, instance = 1001, continent = EASTERN_KINGDOMS}, -- Scarlet Halls
+    {spell = 131232, instance = 1007, continent = EASTERN_KINGDOMS}, -- Scholomance
+    {spell = 159902, instance = 1358, continent = EASTERN_KINGDOMS}, -- Upper Blackrock Spire
 
     -- hearthstone toys
     {toy = 54452, category = ADDON.Category.Hearthstone},
