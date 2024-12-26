@@ -1,5 +1,4 @@
 ## General
- - rename to ... Scotty ?
  - [] CI/Packager
  - [] CF Project
  - [] WaGo Project (later)

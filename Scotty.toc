@@ -1,6 +1,6 @@
 ## Interface: 110007
-## Title: Warp
-## Notes: Small tools to get arround faster
+## Title: Scotty
+## Notes: You personal transportation assistant
 ## Author: eXochron
 ## Version: @project-version@
 
