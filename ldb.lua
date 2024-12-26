@@ -23,7 +23,7 @@ local function generateTeleportMenu(_, root)
 
     local function buildEntry(root, type, id, icon, location, tooltipSetter, hasCooldown)
         local element = root:CreateButton("|T" .. icon .. ":0|t "..location)
-        element:SetOnEnter(function(frame)
+        element:HookOnEnter(function(frame)
             menuActionButton:SetAttribute("type", type)
             menuActionButton:SetAttribute("typerelease", type)
             menuActionButton:SetAttribute(type, id)
@@ -39,7 +39,7 @@ local function generateTeleportMenu(_, root)
             tooltipSetter(GameTooltip, id)
             GameTooltip:Show()
         end)
-        element:SetOnLeave(function()
+        element:HookOnLeave(function()
             GameTooltip:Hide()
             menuActionButton:Hide()
         end)
@@ -64,7 +64,9 @@ local function generateTeleportMenu(_, root)
     end
 
     local function buildItemEntry(root, itemId, location)
-        return buildEntry(
+        --todo: is item in bag or equiped?
+
+        local element = buildEntry(
                 root,
             "item",
             itemId,
@@ -73,6 +75,25 @@ local function generateTeleportMenu(_, root)
             GameTooltip.SetItemByID,
                 C_Container.GetItemCooldown(itemId) > 0
         )
+        if C_Item.IsEquippableItem(itemId) then
+
+            local invTypeId = C_Item.GetItemInventoryTypeByID(itemId)
+            --TODO: convert invTypeId to slot number
+
+            element:HookOnEnter(function()
+                menuActionButton:SetScript("PreClick", function()
+                    menuActionButton:SetAttribute("item", "")
+                    menuActionButton:SetAttribute("slot", 13) --todo: dynamic slot
+                end)
+                if not C_Item.IsEquippedItem(itemId) then
+                    C_Item.EquipItemByName(itemId)
+                end
+            end)
+
+            --TODO: reequip onLeave or cast finished
+        end
+
+        return element
     end
 
     local function buildSpellEntry(root, spellId, location)
@@ -149,7 +170,7 @@ local function generateTeleportMenu(_, root)
     table.sort(continents, function(a, b) return a > b end)
     for _, continent in ipairs(continents) do
         local list = groupedByContinent[continent]
-        list = tFilter(list, function(row) return (row.spell and IsSpellKnown(row.spell)) or (row.toy and PlayerHasToy(row.toy)) end, true)
+        list = tFilter(list, function(row) return (row.spell and IsSpellKnown(row.spell)) or (row.toy and PlayerHasToy(row.toy) or (row.item)) end, true)
         if #list > 0 then
             list = SortRowsByName(list)
             local continentRoot = root:CreateButton(GetRealZoneText(continent))
@@ -158,6 +179,8 @@ local function generateTeleportMenu(_, root)
                     buildSpellEntry(continentRoot, row.spell, GetName(row))
                 elseif row.toy then
                     buildToyEntry(continentRoot, row.toy, GetName(row))
+                elseif row.item then
+                    buildItemEntry(continentRoot, row.item, GetName(row))
                 end
             end
         end
