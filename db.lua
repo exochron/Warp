@@ -25,14 +25,62 @@ ADDON.Category = {
 
 ADDON.db = {
     --todo: various items
-    --todo: equipable items
     --todo: mage ports & portals
     --todo: druid ports
 
     --various items
-    {toy = 140192, map = 626, continent = BROKEN_ISLES}, -- Dalaran Hearthstone
-    {toy = 110560, map = (isAlliance and 539 or 525), continent = DRAENOR}, -- Garrison Hearthstone
+    {item = 21711, map = 80, continent = KALIMDOR}, -- Lunar Festival Invitation
+    {item = 22631, map = 42, continent = EASTERN_KINGDOMS}, -- Atiesh, Greatstaff of the Guardian
+    {item = 37863, map = 35, continent = EASTERN_KINGDOMS}, -- Direbrew's Remote
+    {item = 40585, map = 125, continent = NORTHREND}, -- Signet of the Kirin Tor
+    {item = 40586, map = 125, continent = NORTHREND}, -- Band of the Kirin Tor
+    {item = 44934, map = 125, continent = NORTHREND}, -- Loop of the Kirin Tor
+    {item = 44935, map = 125, continent = NORTHREND}, -- Ring of the Kirin Tor
+    {item = 45688, map = 125, continent = NORTHREND}, -- Inscribed Band of the Kirin Tor
+    {item = 45689, map = 125, continent = NORTHREND}, -- Inscribed Loop of the Kirin Tor
+    {item = 45690, map = 125, continent = NORTHREND}, -- Inscribed Ring of the Kirin Tor
+    {item = 45691, map = 125, continent = NORTHREND}, -- Inscribed Signet of the Kirin Tor
+    {item = 46874, map = 118, continent = NORTHREND}, -- Argent Crusader's Tabard
+    {item = 48954, map = 125, continent = NORTHREND}, -- Etched Band of the Kirin Tor
+    {item = 48955, map = 125, continent = NORTHREND}, -- Etched Loop of the Kirin Tor
+    {item = 48956, map = 125, continent = NORTHREND}, -- Etched Ring of the Kirin Tor
+    {item = 48957, map = 125, continent = NORTHREND}, -- Etched Signet of the Kirin Tor
+    {item = 50287, map = 210, continent = EASTERN_KINGDOMS}, -- Boots of the Bay
+    {item = 51557, map = 125, continent = NORTHREND}, -- Runed Signet of the Kirin Tor
+    {item = 51558, map = 125, continent = NORTHREND}, -- Runed Loop of the Kirin Tor
+    {item = 51559, map = 125, continent = NORTHREND}, -- Runed Ring of the Kirin Tor
+    {item = 51560, map = 125, continent = NORTHREND}, -- Runed Band of the Kirin Tor
+    {item = 52251, map = 125, continent = NORTHREND}, -- Jaina's Locket
+    {item = 52251, map = 125, continent = NORTHREND}, -- Potion of Deepholm
+    {item = 63206, map = 84, continent = EASTERN_KINGDOMS}, -- Wrap of Unity
+    {item = 63207, map = 85, continent = KALIMDOR}, -- Wrap of Unity
+    {item = 63352, map = 84, continent = EASTERN_KINGDOMS}, -- Shroud of Cooperation
+    {item = 63353, map = 85, continent = KALIMDOR}, -- Shroud of Cooperation
+    {item = 63378, map = 245, continent = EASTERN_KINGDOMS}, -- Hellscream's Reach Tabard
+    {item = 63379, map = 245, continent = EASTERN_KINGDOMS}, -- Baradin's Wardens Tabard
+    {item = 65274, map = 85, continent = KALIMDOR}, -- Cloak of Coordination
+    {item = 65360, map = 84, continent = EASTERN_KINGDOMS}, -- Cloak of Coordination
+    {item = 95050, map = 503, continent = KALIMDOR}, -- The Brassiest Knuckle
+    {item = 95051, map = 500, continent = EASTERN_KINGDOMS}, -- The Brassiest Knuckle
     {item = 103678, map = 554, continent = PANDARIA}, -- Time-Lost Artifact
+    {item = 118662, map = 624, continent = DRAENOR}, -- Bladespire Relic
+    {item = 118663, map = 622, continent = DRAENOR}, -- Relic of Karabor
+    {item = 118907, map = 500, continent = EASTERN_KINGDOMS}, -- Pit Fighter's Punching Ring
+    {item = 118908, map = 503, continent = KALIMDOR}, -- Pit Fighter's Punching Ring
+    {item = 128353, map = (isAlliance and 539 or 525), continent = DRAENOR}, -- Admiral's Compass
+    {item = 139590, map = 25, continent = EASTERN_KINGDOMS}, -- Scroll of Teleport: Ravenholdt
+    {item = 139599, map = 627, continent = BROKEN_ISLES}, -- Empowered Ring of the Kirin Tor
+    {item = 144391, map = 500, continent = EASTERN_KINGDOMS}, -- Pugilist's Powerful Punching Ring
+    {item = 144392, map = 503, continent = KALIMDOR}, -- Pugilist's Powerful Punching Ring
+    {item = 166559, map = 1165, continent = ZANDALAR}, -- Commander's Signet of Battle
+    {item = 166560, map = 1161, continent = KUL_TIRAS}, -- Commander's Signet of Battle
+    {toy = 95567, map = 504, continent = PANDARIA}, -- Kirin Tor Beacon
+    {toy = 95568, map = 504, continent = PANDARIA}, -- Sunreaver Beacon
+    {toy = 110560, map = (isAlliance and 539 or 525), continent = DRAENOR}, -- Garrison Hearthstone
+    {toy = 140192, map = 627, continent = BROKEN_ISLES}, -- Dalaran Hearthstone
+    {toy = 142469, map = 42, continent = EASTERN_KINGDOMS}, -- Violet Seal of the Grand Magus
+    {toy = 151016, map = 104, continent = OUTLAND}, -- Fractured Necrolyte Skull
+
 
     --engineer items
     {toy = 18984, map = 83, continent = KALIMDOR}, -- Dimensional Ripper - Everlook

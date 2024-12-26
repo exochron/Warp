@@ -104,7 +104,9 @@ local function generateTeleportMenu(_, root)
     end
 
     local function buildItemEntry(root, itemId, location)
-        --todo: is item in bag or equiped?
+        if not C_Item.IsEquippedItem(itemId) and not ADDON:PlayerHasItemInBag(itemId) then
+            return
+        end
 
         local element = buildEntry(
                 root,

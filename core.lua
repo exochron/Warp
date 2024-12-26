@@ -60,3 +60,15 @@ function ADDON:GetItemSlot(itemId)
     end
     if invTypeId == 19 then return 19 end
 end
+
+function ADDON:PlayerHasItemInBag(itemId)
+    for bagID = 0, NUM_BAG_SLOTS do
+        local numSlots = C_Container.GetContainerNumSlots(bagID)
+        for slotID = 1, numSlots do
+            if C_Container.GetContainerItemID(bagID, slotID) == itemId then
+                return true
+            end
+        end
+    end
+    return false
+end
