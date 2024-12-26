@@ -15,6 +15,44 @@ local function buildMenuActionButton()
     return button
 end
 
+local equipQueue = {}
+local equipAwaitingConfirmationForSlot
+local function equip(itemId, priority)
+    if itemId and not C_Item.IsEquippedItem(itemId) then
+        local itemSlot = ADDON:GetItemSlot(itemId)
+        if not equipAwaitingConfirmationForSlot and #equipQueue == 0 then
+            equipAwaitingConfirmationForSlot = itemSlot
+            local eventHandle
+            eventHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("PLAYER_EQUIPMENT_CHANGED", function(_, equipmentSlot, hasCurrent)
+                if equipmentSlot and false == hasCurrent and C_Item.IsEquippedItem(itemId) then
+                    equipAwaitingConfirmationForSlot = nil
+
+                    local nextItemId
+                    repeat
+                        nextItemId = table.remove(equipQueue)
+                    until not nextItemId or not C_Item.IsEquippedItem(nextItemId)
+
+                    if nextItemId then
+                        equipAwaitingConfirmationForSlot = ADDON:GetItemSlot(nextItemId)
+                        C_Item.EquipItemByName(nextItemId)
+                    else
+                        eventHandle:Unregister()
+                    end
+                end
+            end, 'equipchanged')
+
+            -- something might prevent equipping. an error message appears than. please prevent that case.
+            C_Item.EquipItemByName(itemId)
+        elseif equipAwaitingConfirmationForSlot then
+            if priority then
+                table.insert(equipQueue, itemId)
+            else
+                table.insert(equipQueue, 1, itemId)
+            end
+        end
+    end
+end
+
 local function generateTeleportMenu(_, root)
     root:SetTag(ADDON_NAME.."-LDB-Teleport")
     root:SetScrollMode(GetScreenHeight() - 100)
@@ -22,7 +60,9 @@ local function generateTeleportMenu(_, root)
     --root:CreateTitle("Teleports")
 
     local function buildEntry(root, type, id, icon, location, tooltipSetter, hasCooldown)
-        local element = root:CreateButton("|T" .. icon .. ":0|t "..location)
+        local element = root:CreateButton("|T" .. icon .. ":0|t "..location, function()
+            return MenuResponse.CloseAll
+        end)
         element:HookOnEnter(function(frame)
             menuActionButton:SetAttribute("type", type)
             menuActionButton:SetAttribute("typerelease", type)
@@ -77,20 +117,38 @@ local function generateTeleportMenu(_, root)
         )
         if C_Item.IsEquippableItem(itemId) then
 
-            local invTypeId = C_Item.GetItemInventoryTypeByID(itemId)
-            --TODO: convert invTypeId to slot number
+            local inventorySlot = ADDON:GetItemSlot(itemId)
+            local previousEquippedItem = GetInventoryItemID("player", inventorySlot)
+            local currentlyClicking = false
 
             element:HookOnEnter(function()
                 menuActionButton:SetScript("PreClick", function()
+                    currentlyClicking = true
                     menuActionButton:SetAttribute("item", "")
-                    menuActionButton:SetAttribute("slot", 13) --todo: dynamic slot
+                    menuActionButton:SetAttribute("slot", inventorySlot)
+
+                    if previousEquippedItem then
+                        local successHandle, stopHandle
+                        local function reequipAfterTeleport(_, unit)
+                            if unit == "player" then
+                                equip(previousEquippedItem, false)
+                                successHandle:Unregister()
+                                stopHandle:Unregister()
+                            end
+                        end
+                        successHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("UNIT_SPELLCAST_SUCCEEDED", reequipAfterTeleport, 'reequip-after-teleport')
+                        stopHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("UNIT_SPELLCAST_STOP", reequipAfterTeleport, 'reequip-after-teleport')
+                    end
                 end)
                 if not C_Item.IsEquippedItem(itemId) then
-                    C_Item.EquipItemByName(itemId)
+                    equip(itemId, true)
                 end
             end)
-
-            --TODO: reequip onLeave or cast finished
+            element:HookOnLeave(function()
+                if not currentlyClicking then
+                    equip(previousEquippedItem, false)
+                end
+            end)
         end
 
         return element

@@ -42,3 +42,21 @@ ADDON.Events:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, 
         end)
     end
 end, "init")
+
+function ADDON:GetItemSlot(itemId)
+    local invTypeId = C_Item.GetItemInventoryTypeByID(itemId)
+    -- from https://warcraft.wiki.gg/wiki/Enum.InventoryType
+    if invTypeId < 12 then
+        return invTypeId
+    end
+    if invTypeId == 20 then return  5 end
+    if invTypeId == 12 then return 13 end
+    if invTypeId == 16 then return 15 end
+    if invTypeId == 13 or invTypeId == 15 or invTypeId == 17 or invTypeId == 21 or invTypeId == 22 or invTypeId == 25 or invTypeId == 26 then
+        return 16
+    end
+    if invTypeId == 14 or invTypeId == 23 then
+        return 17
+    end
+    if invTypeId == 19 then return 19 end
+end
