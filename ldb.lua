@@ -201,6 +201,8 @@ local function generateTeleportMenu(_, root)
             hearthstoneButton:ShuffleHearthstone()
             return MenuResponse.CloseAll
         end)
+    elseif hearthstoneButton:GetAttribute("spell") then
+        buildItemEntry(root, hearthstoneButton:GetAttribute("spell"), GetBindLocation())
     else
         buildItemEntry(root, hearthstoneButton:GetAttribute("item"), GetBindLocation())
     end
@@ -291,7 +293,17 @@ local function buildHearthstoneButton()
             self:SetAttribute("typerelease", "toy")
             self:SetAttribute("toy", toy)
             self:SetAttribute("item", nil)
+            self:SetAttribute("spell", nil)
             return
+        end
+
+        local AstralRecall = 556
+        if IsSpellKnown(AstralRecall) and C_Spell.IsSpellUsable(AstralRecall) then
+            self:SetAttribute("type", "spell")
+            self:SetAttribute("typerelease", "spell")
+            self:SetAttribute("spell", AstralRecall)
+            self:SetAttribute("item", nil)
+            self:SetAttribute("toy", nil)
         end
 
         local item = C_Container.PlayerHasHearthstone and C_Container.PlayerHasHearthstone() or PlayerHasHearthstone()
@@ -300,6 +312,7 @@ local function buildHearthstoneButton()
             self:SetAttribute("typerelease", "item")
             self:SetAttribute("item", item)
             self:SetAttribute("toy", nil)
+            self:SetAttribute("spell", nil)
         end
     end
 

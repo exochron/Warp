@@ -24,7 +24,6 @@ ADDON.Category = {
 }
 
 ADDON.db = {
-    --todo: various items
     --todo: mage ports & portals
     --todo: druid ports
 
@@ -162,7 +161,8 @@ ADDON.db = {
     {spell = 131232, instance = 1007, continent = EASTERN_KINGDOMS}, -- Scholomance
     {spell = 159902, instance = 1358, continent = EASTERN_KINGDOMS}, -- Upper Blackrock Spire
 
-    -- hearthstone toys
+    -- hearthstones
+    {spell = 556, category = ADDON.Category.Hearthstone}, -- Astral Recall (shaman)
     {toy = 54452, category = ADDON.Category.Hearthstone},
     {toy = 64488, category = ADDON.Category.Hearthstone},
     {toy = 93672, category = ADDON.Category.Hearthstone},
