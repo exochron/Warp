@@ -24,8 +24,7 @@ ADDON.Category = {
 }
 
 ADDON.db = {
-    --todo: mage ports & portals
-    --todo: druid ports
+    --todo: order hall class ports
 
     --various items
     {item = 21711, map = 80, continent = KALIMDOR}, -- Lunar Festival Invitation
@@ -73,13 +72,48 @@ ADDON.db = {
     {item = 144392, map = 503, continent = KALIMDOR}, -- Pugilist's Powerful Punching Ring
     {item = 166559, map = 1165, continent = ZANDALAR}, -- Commander's Signet of Battle
     {item = 166560, map = 1161, continent = KUL_TIRAS}, -- Commander's Signet of Battle
-    {toy = 95567, map = 504, continent = PANDARIA}, -- Kirin Tor Beacon
-    {toy = 95568, map = 504, continent = PANDARIA}, -- Sunreaver Beacon
     {toy = 110560, map = (isAlliance and 539 or 525), continent = DRAENOR}, -- Garrison Hearthstone
     {toy = 140192, map = 627, continent = BROKEN_ISLES}, -- Dalaran Hearthstone
     {toy = 142469, map = 42, continent = EASTERN_KINGDOMS}, -- Violet Seal of the Grand Magus
     {toy = 151016, map = 104, continent = OUTLAND}, -- Fractured Necrolyte Skull
 
+    -- druid dreamwalk
+    {spell = 193753, map = 747, continent = BROKEN_ISLES},
+    {spell = 193753, map = 198, continent = KALIMDOR},
+    {spell = 193753, map = 26, continent = EASTERN_KINGDOMS},
+    {spell = 193753, map = 47, continent = EASTERN_KINGDOMS},
+    {spell = 193753, map = 80, continent = KALIMDOR},
+    {spell = 193753, map = 69, continent = KALIMDOR},
+    {spell = 193753, map = 116, continent = NORTHREND},
+
+    -- mage teleports and portals
+    -- https://www.wowhead.com/guide/transportation#mage-portals
+    {spell = 3561, portal = 10059, map = 84, continent = EASTERN_KINGDOMS}, -- Stormwind
+    {spell = 3562, portal = 11416, map = 87, continent = EASTERN_KINGDOMS}, -- Ironforge
+    {spell = 3563, portal = 11418, map = 90, continent = EASTERN_KINGDOMS}, -- Undercity
+    {spell = 3565, portal = 11419, map = 89, continent = KALIMDOR}, -- Darnassus
+    {spell = 3566, portal = 11420, map = 88, continent = KALIMDOR}, -- Thunder Bluff
+    {spell = 3567, portal = 11417, map = 85, continent = KALIMDOR}, -- Orgrimmar
+    {spell = 32271, portal = 32266, map = 103, continent = KALIMDOR}, -- Exodar
+    {spell = 32272, portal = 32267, map = 110, continent = EASTERN_KINGDOMS}, -- Silvermoon
+    {spell = 35715, portal = 35717, map = 111, continent = OUTLAND}, -- Shattrath
+    {spell = 33690, portal = 33691, map = 111, continent = OUTLAND}, -- Shattrath
+    {spell = 49358, portal = 49361, map = 51, continent = EASTERN_KINGDOMS}, -- Stonard
+    {spell = 49359, portal = 49360, map = 70, continent = KALIMDOR}, -- Theramore
+    {spell = 53140, portal = 53142, map = 125, continent = NORTHREND}, -- Dalaran
+    {spell = 88341, portal = 88345, map = 245, continent = EASTERN_KINGDOMS}, -- Tol Barad
+    {spell = 88344, portal = 88346, map = 245, continent = EASTERN_KINGDOMS}, -- Tol Barad
+    {spell = 120145, portal = 120146, map = 25, continent = EASTERN_KINGDOMS}, -- Dalaran Crater
+    {spell = 132621, portal = 132620, map = 390, continent = PANDARIA}, -- Vale of Eternal BLossoms
+    {spell = 132627, portal = 132626, map = 390, continent = PANDARIA}, -- Vale of Eternal BLossoms
+    {spell = 176242, portal = 176244, map = 624, continent = DRAENOR}, -- Warspear
+    {spell = 176248, portal = 176246, map = 622, continent = DRAENOR}, -- Stormshield
+    {spell = 224869, portal = 224871, map = 627, continent = BROKEN_ISLES}, -- Dalaran
+    {spell = 281403, portal = 281400, map = 1161, continent = KUL_TIRAS}, -- Boralus
+    {spell = 281404, portal = 281402, map = 1165, continent = ZANDALAR}, -- Dazar'alor
+    {spell = 344587, portal = 344597, map = 1670, continent = SHADOWLANDS}, -- Oribos
+    {spell = 395277, portal = 395289, map = 2134, continent = DRAGON_ISLES}, -- Valdraken
+    {spell = 446540, portal = 446534, map = 2339, continent = KHAZ_ALGAR}, -- Dornogal
 
     --engineer items
     {toy = 18984, map = 83, continent = KALIMDOR}, -- Dimensional Ripper - Everlook

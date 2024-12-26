@@ -156,8 +156,8 @@ local function generateTeleportMenu(_, root)
         return element
     end
 
-    local function buildSpellEntry(root, spellId, location)
-        return buildEntry(
+    local function buildSpellEntry(root, spellId, location, portalId)
+        local element = buildEntry(
                 root,
             "spell",
             spellId,
@@ -166,6 +166,46 @@ local function generateTeleportMenu(_, root)
             GameTooltip.SetSpellByID,
             not C_Spell.IsSpellUsable(spellId)
         )
+
+        if portalId and IsSpellKnown(portalId) then
+            local portalButton
+            element:AddInitializer(function(button, elementDescription, menu)
+                portalButton = button:AttachTemplate("WowMenuAutoHideButtonTemplate")
+
+                portalButton:SetNormalFontObject("GameFontHighlight")
+                portalButton:SetHighlightFontObject("GameFontHighlight")
+                portalButton:SetText(" "..ADDON.L.MENU_PORTAL.." |T" .. C_Spell.GetSpellTexture(portalId) .. ":0|t")
+                portalButton:SetSize(portalButton:GetTextWidth(), button.fontString:GetHeight())
+                portalButton:SetPoint("RIGHT")
+                portalButton:SetPoint("BOTTOM", button.fontString)
+
+                if not C_Spell.IsSpellUsable(portalId) then
+                    portalButton.fontString:SetAlpha(0.5)
+                end
+
+                portalButton:SetScript("OnClick", function()
+                    C_Timer.After(0.01, function()
+                        menu:SendResponse(elementDescription, MenuResponse.CloseAll)
+                    end)
+                end)
+                portalButton:SetScript("OnEnter", function()
+                    GameTooltip.SetSpellByID(GameTooltip, portalId)
+                    menuActionButton:SetAttribute("spell", portalId)
+                end)
+                portalButton:SetScript("OnLeave", function()
+                    GameTooltip.SetSpellByID(GameTooltip, spellId)
+                    menuActionButton:SetAttribute("spell", spellId)
+                end)
+            end)
+            element:HookOnEnter(function()
+                if portalButton and portalButton:IsMouseOver() then
+                    GameTooltip.SetSpellByID(GameTooltip, portalId)
+                    menuActionButton:SetAttribute("spell", portalId)
+                end
+            end)
+        end
+
+        return element
     end
 
     local function GetName(row)
@@ -238,7 +278,7 @@ local function generateTeleportMenu(_, root)
             local continentRoot = root:CreateButton(GetRealZoneText(continent))
             for _, row in ipairs(list) do
                 if row.spell then
-                    buildSpellEntry(continentRoot, row.spell, GetName(row))
+                    buildSpellEntry(continentRoot, row.spell, GetName(row), row.portal)
                 elseif row.toy then
                     buildToyEntry(continentRoot, row.toy, GetName(row))
                 elseif row.item then
