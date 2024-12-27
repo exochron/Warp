@@ -4,6 +4,8 @@ ADDON.L = {}
 local L = ADDON.L
 
 L.MENU_PORTAL = "Portal"
+L.MENU_SEASON_LABEL = "Season"
+L.SETTING_GROUP_SEASON = "Group Season Teleports"
 L.SETTING_MINIMAP = "Show Minimap Icon"
 
 

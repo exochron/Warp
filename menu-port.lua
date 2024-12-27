@@ -239,58 +239,69 @@ local function generateTeleportMenu(_, root)
     end
 
     -- Hearthstone
-    local hearthstoneButton = _G[ADDON_NAME.."HearthstoneButton"]
-    if hearthstoneButton:GetAttribute("toy") then
-        buildToyEntry(root, hearthstoneButton:GetAttribute("toy"), GetBindLocation()):SetResponder(function()
-            hearthstoneButton:ShuffleHearthstone()
-            return MenuResponse.CloseAll
-        end)
-    elseif hearthstoneButton:GetAttribute("spell") then
-        buildSpellEntry(root, hearthstoneButton:GetAttribute("spell"), GetBindLocation())
-    elseif hearthstoneButton:GetAttribute("item") then
-        buildItemEntry(root, hearthstoneButton:GetAttribute("item"), GetBindLocation())
-    end
-    root:QueueSpacer()
-
-    -- season dungeons
-    local seasonSpells = tFilter(ADDON.db, function(row)
-        return row.category == ADDON.Category.SeasonInstance and row.spell and IsSpellKnown(row.spell)
-    end, true)
-    seasonSpells = SortRowsByName(seasonSpells)
-    for _, row in ipairs(seasonSpells) do
-        buildSpellEntry(root, row.spell, GetRealZoneText(row.instance))
-    end
-    root:QueueSpacer()
-
-    -- continents
-    local groupedByContinent = {}
-    for _, row in ipairs(ADDON.db) do
-        if row.continent then
-            if not groupedByContinent[row.continent] then
-                groupedByContinent[row.continent] = {}
-            end
-            table.insert(groupedByContinent[row.continent], row)
+    do
+        local hearthstoneButton = _G[ADDON_NAME.."HearthstoneButton"]
+        if hearthstoneButton:GetAttribute("toy") then
+            buildToyEntry(root, hearthstoneButton:GetAttribute("toy"), GetBindLocation()):SetResponder(function()
+                hearthstoneButton:ShuffleHearthstone()
+                return MenuResponse.CloseAll
+            end)
+            root:QueueSpacer()
+        elseif hearthstoneButton:GetAttribute("spell") then
+            buildSpellEntry(root, hearthstoneButton:GetAttribute("spell"), GetBindLocation())
+            root:QueueSpacer()
+        elseif hearthstoneButton:GetAttribute("item") then
+            buildItemEntry(root, hearthstoneButton:GetAttribute("item"), GetBindLocation())
+            root:QueueSpacer()
         end
     end
-    local continents = GetKeysArray(groupedByContinent)
-    table.sort(continents, function(a, b) return a > b end)
-    for _, continent in ipairs(continents) do
-        local list = groupedByContinent[continent]
-        list = tFilter(list, function(row)
-            return (row.spell and IsSpellKnown(row.spell))
-                    or (row.toy and PlayerHasToy(row.toy)
-                    or (row.item and (C_Item.IsEquippedItem(row.item) or ADDON:PlayerHasItemInBag(row.item))))
+
+    -- season dungeons
+    do
+        local seasonRoot = ADDON.settings.groupSeason and root:CreateButton(ADDON.L.MENU_SEASON_LABEL) or root
+        local seasonSpells = tFilter(ADDON.db, function(row)
+            return row.category == ADDON.Category.SeasonInstance and row.spell and IsSpellKnown(row.spell)
         end, true)
-        if #list > 0 then
-            list = SortRowsByName(list)
-            local continentRoot = root:CreateButton(GetRealZoneText(continent))
-            for _, row in ipairs(list) do
-                if row.spell then
-                    buildSpellEntry(continentRoot, row.spell, GetName(row), row.portal)
-                elseif row.toy then
-                    buildToyEntry(continentRoot, row.toy, GetName(row))
-                elseif row.item then
-                    buildItemEntry(continentRoot, row.item, GetName(row))
+        seasonSpells = SortRowsByName(seasonSpells)
+        for _, row in ipairs(seasonSpells) do
+            buildSpellEntry(seasonRoot, row.spell, GetRealZoneText(row.instance))
+        end
+        if #seasonSpells > 0 then
+            root:QueueSpacer()
+        end
+    end
+
+    -- continents
+    do
+        local groupedByContinent = {}
+        for _, row in ipairs(ADDON.db) do
+            if row.continent then
+                if not groupedByContinent[row.continent] then
+                    groupedByContinent[row.continent] = {}
+                end
+                table.insert(groupedByContinent[row.continent], row)
+            end
+        end
+        local continents = GetKeysArray(groupedByContinent)
+        table.sort(continents, function(a, b) return a > b end)
+        for _, continent in ipairs(continents) do
+            local list = groupedByContinent[continent]
+            list = tFilter(list, function(row)
+                return (row.spell and IsSpellKnown(row.spell))
+                        or (row.toy and PlayerHasToy(row.toy)
+                        or (row.item and (C_Item.IsEquippedItem(row.item) or ADDON:PlayerHasItemInBag(row.item))))
+            end, true)
+            if #list > 0 then
+                list = SortRowsByName(list)
+                local continentRoot = root:CreateButton(GetRealZoneText(continent))
+                for _, row in ipairs(list) do
+                    if row.spell then
+                        buildSpellEntry(continentRoot, row.spell, GetName(row), row.portal)
+                    elseif row.toy then
+                        buildToyEntry(continentRoot, row.toy, GetName(row))
+                    elseif row.item then
+                        buildItemEntry(continentRoot, row.item, GetName(row))
+                    end
                 end
             end
         end

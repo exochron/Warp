@@ -12,9 +12,12 @@ local function registerSettings()
     minimapSetting:SetValueChangedCallback(function(_, value)
         ADDON.settings.minimap.hide = not value
         LibStub("LibDBIcon-1.0"):Refresh(ADDON_NAME, ADDON.settings.minimap)
-    end);
-
+    end)
     Settings.CreateCheckbox(category, minimapSetting)
+
+    local groupSeasonSetting = Settings.RegisterAddOnSetting(category, ADDON_NAME.."_GROUP_SEASON", "groupSeason",
+        ADDON.settings, Settings.VarType.Boolean, L.SETTING_GROUP_SEASON, Settings.Default.False)
+    Settings.CreateCheckbox(category, groupSeasonSetting)
 
     Settings.RegisterAddOnCategory(category)
     categoryID = category.ID
@@ -26,6 +29,7 @@ end
 
 ADDON.Events:RegisterCallback("OnInit", function()
     local defaults = {
+        groupSeason = false,
         showMinimap = true,
         minimap = {} -- for LibDBIcon
     }

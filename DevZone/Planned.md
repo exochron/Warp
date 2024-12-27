@@ -19,7 +19,7 @@
  - [x] Hearthstones
  - [x] Mage: TP and Portal together
  - [ ] Favorites (?)
- - [ ] season teleports as group
+ - [x] season teleports as group
  - [x] Season Dungeons
  - [x] Group by Continent
  - [x] Menu on Minimap Icon
