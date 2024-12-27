@@ -5,6 +5,7 @@
 ## IconTexture: Interface\Addons\Scotty\icon.png
 ## Version: @project-version@
 ## SavedVariables: ScottyGlobalSettings
+## X-Curse-Project-ID: 1166725
 
 Libs\LibDBIcon\embeds.xml
 Libs\LibDBIcon\LibDBIcon-1.0\lib.xml

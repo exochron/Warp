@@ -1,6 +1,6 @@
 ## General
  - [x] Project Icon
- - [ ] CI/Packager
+ - [x] CI/Packager
  - [x] CF Project
  - [ ] WaGo Project (later)
  - [ ] Screenshots
@@ -8,7 +8,6 @@
  - [x] Settings
  - [x] Settings Panel
  - [x] Addon Compartment
- - [ ] Donation links
  - [ ] Cataclysm Support
  - [ ] Classic Support
 
@@ -20,13 +19,14 @@
  - [x] Hearthstones
  - [x] Mage: TP and Portal together
  - [ ] Favorites (?)
+ - [ ] season teleports as group
  - [x] Season Dungeons
  - [x] Group by Continent
  - [x] Menu on Minimap Icon
 
 ## Adventure Journal
- - [] add dungeon ports on overview
- - [] add dungeon port on instance view
+ - [ ] add dungeon ports on overview
+ - [ ] add dungeon port on instance view
 
 ## World Map
- - [] add teleport next to destinations
+ - [ ] add teleport next to destinations
