@@ -2,39 +2,42 @@ local ADDON_NAME, ADDON = ...
 
 local menuActionButton
 local equipQueue = {}
-local equipAwaitingConfirmationForSlot
-local function equip(itemId, priority)
-    if itemId and not C_Item.IsEquippedItem(itemId) then
+local equipTicker
+
+local function equip(itemId)
+    if itemId then
         local itemSlot = ADDON:GetItemSlot(itemId)
-        if not equipAwaitingConfirmationForSlot and #equipQueue == 0 then
-            equipAwaitingConfirmationForSlot = itemSlot
-            local eventHandle
-            eventHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("PLAYER_EQUIPMENT_CHANGED", function(_, equipmentSlot, hasCurrent)
-                if equipmentSlot and false == hasCurrent and C_Item.IsEquippedItem(itemId) then
-                    equipAwaitingConfirmationForSlot = nil
 
-                    local nextItemId
-                    repeat
-                        nextItemId = table.remove(equipQueue)
-                    until not nextItemId or not C_Item.IsEquippedItem(nextItemId)
+        equipQueue[itemSlot] = itemId
+        local eventHandle
+        eventHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("PLAYER_EQUIPMENT_CHANGED", function(_, equipmentSlot, hasCurrent)
+            if itemSlot == equipmentSlot and false == hasCurrent and C_Item.IsEquippedItem(itemId) then
+                if equipQueue[itemSlot] == itemId then
+                    equipQueue[itemSlot] = nil
+                end
+                eventHandle:Unregister()
+            end
+        end, 'equipitem-'..itemId)
 
-                    if nextItemId then
-                        equipAwaitingConfirmationForSlot = ADDON:GetItemSlot(nextItemId)
-                        C_Item.EquipItemByName(nextItemId)
-                    else
-                        eventHandle:Unregister()
+        if not equipTicker or equipTicker:IsCancelled() then
+            local tickHandler = function()
+                local requestedEquip = false
+
+                for _, queuedItemId in pairs(equipQueue) do
+                    if queuedItemId then
+                        C_Item.EquipItemByName(queuedItemId)
+                        requestedEquip = true
+                        break
                     end
                 end
-            end, 'equipchanged')
 
-            -- something might prevent equipping. an error message appears than. please prevent that case.
-            C_Item.EquipItemByName(itemId)
-        elseif equipAwaitingConfirmationForSlot then
-            if priority then
-                table.insert(equipQueue, itemId)
-            else
-                table.insert(equipQueue, 1, itemId)
+                if not requestedEquip and equipTicker then
+                    equipTicker:Cancel()
+                    equipTicker = nil
+                end
             end
+            tickHandler()
+            equipTicker = C_Timer.NewTicker(0.1, tickHandler, 100)
         end
     end
 end
@@ -76,8 +79,8 @@ local function generateTeleportMenu(_, root)
 
     --root:CreateTitle("Teleports")
 
-    local function buildEntry(root, type, id, icon, location, tooltipSetter, hasCooldown)
-        local element = root:CreateButton("|T" .. icon .. ":0|t "..location, function()
+    local function buildEntry(menuRoot, type, id, icon, location, tooltipSetter, hasCooldown)
+        local element = menuRoot:CreateButton("|T" .. icon .. ":0|t "..location, function()
             return MenuResponse.CloseAll
         end)
         element:HookOnEnter(function(frame)
@@ -108,9 +111,9 @@ local function generateTeleportMenu(_, root)
         return element
     end
 
-    local function buildToyEntry(root, itemId, location)
+    local function buildToyEntry(menuRoot, itemId, location)
         return buildEntry(
-                root,
+                menuRoot,
                 "toy",
                 itemId,
                 C_Item.GetItemIconByID(itemId),
@@ -120,9 +123,9 @@ local function generateTeleportMenu(_, root)
         )
     end
 
-    local function buildItemEntry(root, itemId, location)
+    local function buildItemEntry(menuRoot, itemId, location)
         local element = buildEntry(
-                root,
+                menuRoot,
                 "item",
                 itemId,
                 C_Item.GetItemIconByID(itemId),
@@ -142,11 +145,11 @@ local function generateTeleportMenu(_, root)
                     menuActionButton:SetAttribute("item", "")
                     menuActionButton:SetAttribute("slot", inventorySlot)
 
-                    if previousEquippedItem then
+                    if previousEquippedItem and previousEquippedItem ~= itemId then
                         local successHandle, stopHandle
                         local function reequipAfterTeleport(_, unit)
                             if unit == "player" then
-                                equip(previousEquippedItem, false)
+                                equip(previousEquippedItem)
                                 successHandle:Unregister()
                                 stopHandle:Unregister()
                             end
@@ -155,13 +158,11 @@ local function generateTeleportMenu(_, root)
                         stopHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("UNIT_SPELLCAST_STOP", reequipAfterTeleport, 'reequip-after-teleport')
                     end
                 end)
-                if not C_Item.IsEquippedItem(itemId) then
-                    equip(itemId, true)
-                end
+                equip(itemId)
             end)
             element:HookOnLeave(function()
                 if not currentlyClicking then
-                    equip(previousEquippedItem, false)
+                    equip(previousEquippedItem)
                 end
             end)
         end
@@ -169,9 +170,9 @@ local function generateTeleportMenu(_, root)
         return element
     end
 
-    local function buildSpellEntry(root, spellId, location, portalId)
+    local function buildSpellEntry(menuRoot, spellId, location, portalId)
         local element = buildEntry(
-                root,
+                menuRoot,
                 "spell",
                 spellId,
                 C_Spell.GetSpellTexture(spellId),
