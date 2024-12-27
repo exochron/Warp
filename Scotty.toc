@@ -4,6 +4,9 @@
 ## Author: eXochron
 ## Version: @project-version@
 
+Libs\LibDBIcon\embeds.xml
+Libs\LibDBIcon\LibDBIcon-1.0\lib.xml
+
 locals.lua
 db.lua
 

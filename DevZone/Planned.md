@@ -12,16 +12,16 @@
  - [] Project Icon
 
 ## LDB
- - [ ] LeftClick uses Hearthstone
+ - [x] LeftClick uses Hearthstone
  - [x] Randomize Hearthstone
  - [ ] select fixed hearthstone
  - [x] grey out hearthstone/spells on CD
  - [x] Hearthstones
- - [ ] Mage: TP and Portal together
+ - [x] Mage: TP and Portal together
  - [ ] Favorites (?)
  - [x] Season Dungeons
  - [x] Group by Continent
- - [ ] Menu on Minimap Icon
+ - [x] Menu on Minimap Icon
 
 ## Adventure Journal
  - [] add dungeon ports on overview

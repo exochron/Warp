@@ -5,6 +5,7 @@ local function buildHearthstoneButton()
     local button = CreateFrame("Button", ADDON_NAME.."HearthstoneButton", nil, "SecureActionButtonTemplate")
 
     local function GetRandomHearthstoneToy()
+        --todo check for race restrictions
         local stones = tFilter(ADDON.db, function(row)
             return row.category == ADDON.Category.Hearthstone and row.toy and PlayerHasToy(row.toy)
         end, true)
@@ -73,44 +74,31 @@ local function buildHearthstoneButton()
 end
 
 ADDON.Events:RegisterCallback("OnLogin", function()
-    local ldb = LibStub and LibStub("LibDataBroker-1.1", true)
-    if not ldb then
-        return
-    end
+    local ldb = LibStub("LibDataBroker-1.1")
 
     hearthstoneButton = buildHearthstoneButton()
 
     local menu
-    local tooltipProxy = CreateFrame("Frame")
-    tooltipProxy:Hide()
-    tooltipProxy:HookScript("OnShow", function()
-        if not InCombatLockdown() then
-            local point, relativeTo, relativePoint, offsetX, offsetY = tooltipProxy:GetPoint(1)
-            hearthstoneButton:SetParent(relativeTo)
-            hearthstoneButton:SetAllPoints(relativeTo)
-
-            menu = ADDON:OpenTeleportMenu(tooltipProxy)
-        end
-    end)
-    tooltipProxy:HookScript("OnHide", function()
-        if menu and not menu:IsMouseOver() then
-            menu:Close()
-        end
-    end)
-
     local hearthstoneItem = hearthstoneButton:GetAttribute("toy") or hearthstoneButton:GetAttribute("item")
     local ldbDataObject = ldb:NewDataObject( ADDON_NAME, {
         type = "data source",
         text = GetBindLocation(),
         label = C_Item.GetItemNameByID(hearthstoneItem),
         icon = C_Item.GetItemIconByID(hearthstoneItem),
-        tooltip = tooltipProxy,
 
-        OnClick = function(_, button)
-            if button == "RightButton" then
-            else
+        OnEnter = function(frame)
+            if not InCombatLockdown() then
+                hearthstoneButton:SetParent(frame)
+                hearthstoneButton:SetAllPoints(frame)
+
+                menu = ADDON:OpenTeleportMenu(frame)
             end
         end,
+        OnLeave = function()
+            if menu and not menu:IsMouseOver() then
+                menu:Close()
+            end
+        end
     } )
 
     hearthstoneButton:HookScript("OnAttributeChanged", function(_, name, value)
@@ -123,5 +111,9 @@ ADDON.Events:RegisterCallback("OnLogin", function()
     ADDON.Events:RegisterFrameEventAndCallback("HEARTHSTONE_BOUND", function()
         ldbDataObject.text = GetBindLocation()
     end, 'ldb-plugin')
+
+    local icon = LibStub("LibDBIcon-1.0")
+    icon:Register(ADDON_NAME, ldbDataObject)
+    icon:Show(ADDON_NAME) --todo: setting
 
 end, "ldb-plugin")

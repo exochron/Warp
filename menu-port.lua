@@ -56,12 +56,10 @@ end
 local function OpenMenu(anchorSource, generator)
     local menuDescription = MenuUtil.CreateRootMenuDescription(MenuVariants.GetDefaultContextMenuMixin())
 
-    local point, relativeTo, relativePoint, offsetX, offsetY = anchorSource:GetPoint(1)
+    Menu.PopulateDescription(generator, anchorSource, menuDescription)
 
-    Menu.PopulateDescription(generator, relativeTo, menuDescription)
-
-    local anchor = CreateAnchor(point, relativeTo, relativePoint, offsetX, offsetY)
-    local menu = Menu.GetManager():OpenMenu(relativeTo, menuDescription, anchor)
+    local anchor = CreateAnchor("TOP", anchorSource, "BOTTOM")
+    local menu = Menu.GetManager():OpenMenu(anchorSource, menuDescription, anchor)
     if menu then
         menu:HookScript("OnLeave", function()
             if not menu:IsMouseOver() then
