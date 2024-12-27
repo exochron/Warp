@@ -3,6 +3,7 @@
 ## Notes: You personal transportation assistant
 ## Author: eXochron
 ## Version: @project-version@
+## SavedVariables: ScottyGlobalSettings
 
 Libs\LibDBIcon\embeds.xml
 Libs\LibDBIcon\LibDBIcon-1.0\lib.xml
@@ -11,5 +12,6 @@ locals.lua
 db.lua
 
 core.lua
+settings.lua
 menu-port.lua
 ldb.lua

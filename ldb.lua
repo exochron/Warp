@@ -98,7 +98,13 @@ ADDON.Events:RegisterCallback("OnLogin", function()
             if menu and not menu:IsMouseOver() then
                 menu:Close()
             end
-        end
+        end,
+
+        OnClick = function(_, mouseButton)
+            if mouseButton == "RightButton" then
+                ADDON:OpenSettings()
+            end
+        end,
     } )
 
     hearthstoneButton:HookScript("OnAttributeChanged", function(_, name, value)
@@ -113,7 +119,6 @@ ADDON.Events:RegisterCallback("OnLogin", function()
     end, 'ldb-plugin')
 
     local icon = LibStub("LibDBIcon-1.0")
-    icon:Register(ADDON_NAME, ldbDataObject)
-    icon:Show(ADDON_NAME) --todo: setting
+    icon:Register(ADDON_NAME, ldbDataObject, ScottyGlobalSettings.minimap)
 
 end, "ldb-plugin")
