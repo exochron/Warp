@@ -4,7 +4,7 @@
  - [x] CF Project
  - [ ] WaGo Project (later)
  - [ ] Screenshots
- - [ ] Localization
+ - [x] Localization
  - [x] Settings
  - [x] Settings Panel
  - [x] Addon Compartment
