@@ -104,10 +104,6 @@ local function generateTeleportMenu(_, root)
     end
 
     local function buildItemEntry(root, itemId, location)
-        if not C_Item.IsEquippedItem(itemId) and not ADDON:PlayerHasItemInBag(itemId) then
-            return
-        end
-
         local element = buildEntry(
                 root,
             "item",
@@ -242,8 +238,8 @@ local function generateTeleportMenu(_, root)
             return MenuResponse.CloseAll
         end)
     elseif hearthstoneButton:GetAttribute("spell") then
-        buildItemEntry(root, hearthstoneButton:GetAttribute("spell"), GetBindLocation())
-    else
+        buildSpellEntry(root, hearthstoneButton:GetAttribute("spell"), GetBindLocation())
+    elseif hearthstoneButton:GetAttribute("item") then
         buildItemEntry(root, hearthstoneButton:GetAttribute("item"), GetBindLocation())
     end
     root:QueueSpacer()
@@ -272,7 +268,11 @@ local function generateTeleportMenu(_, root)
     table.sort(continents, function(a, b) return a > b end)
     for _, continent in ipairs(continents) do
         local list = groupedByContinent[continent]
-        list = tFilter(list, function(row) return (row.spell and IsSpellKnown(row.spell)) or (row.toy and PlayerHasToy(row.toy) or (row.item)) end, true)
+        list = tFilter(list, function(row)
+            return (row.spell and IsSpellKnown(row.spell))
+                    or (row.toy and PlayerHasToy(row.toy)
+                    or (row.item and (C_Item.IsEquippedItem(row.item) or ADDON:PlayerHasItemInBag(row.item))))
+        end, true)
         if #list > 0 then
             list = SortRowsByName(list)
             local continentRoot = root:CreateButton(GetRealZoneText(continent))
