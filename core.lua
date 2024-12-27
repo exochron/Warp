@@ -1,4 +1,4 @@
-local _, ADDON = ...
+local ADDON_NAME, ADDON = ...
 
 ADDON.Events = CreateFromMixins(EventRegistry)
 ADDON.Events:OnLoad()
@@ -10,6 +10,13 @@ ADDON.Events:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, 
         ADDON.Events:TriggerEvent("OnLogin")
         ADDON.Events:UnregisterEvents({"OnInit", "OnLogin"})
         ADDON.Events:UnregisterFrameEvent("PLAYER_ENTERING_WORLD")
+
+        AddonCompartmentFrame:RegisterAddon({
+            text = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Title"),
+            icon = C_AddOns.GetAddOnMetadata(ADDON_NAME, "IconTexture"),
+            notCheckable = true,
+            func = ADDON.OpenSettings
+        })
     end
 end, "init")
 

@@ -1,15 +1,16 @@
 ## General
- - [] CI/Packager
- - [] CF Project
- - [] WaGo Project (later)
- - [] Screenshots
- - [] Localization
- - [] Settings
- - [] Settings Panel
- - [] Addon Compartment
- - [] Cataclysm Support
- - [] Classic Support
- - [] Project Icon
+ - [x] Project Icon
+ - [ ] CI/Packager
+ - [x] CF Project
+ - [ ] WaGo Project (later)
+ - [ ] Screenshots
+ - [ ] Localization
+ - [x] Settings
+ - [x] Settings Panel
+ - [x] Addon Compartment
+ - [ ] Donation links
+ - [ ] Cataclysm Support
+ - [ ] Classic Support
 
 ## LDB
  - [x] LeftClick uses Hearthstone
