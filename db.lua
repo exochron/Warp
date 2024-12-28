@@ -9,7 +9,6 @@ local NORTHREND = 571
 local PANDARIA = 870
 local DRAENOR = 1116
 local BROKEN_ISLES = 1220
-local ARGUS = 1669
 local ZANDALAR = 1642
 local KUL_TIRAS = 1643
 local SHADOWLANDS = 2222
@@ -24,8 +23,6 @@ ADDON.Category = {
 }
 
 ADDON.db = {
-    --todo: order hall class ports
-
     --various items
     {item = 21711, map = 80, continent = KALIMDOR}, -- Lunar Festival Invitation
     {item = 22631, map = 42, continent = EASTERN_KINGDOMS}, -- Atiesh, Greatstaff of the Guardian
@@ -77,14 +74,18 @@ ADDON.db = {
     {toy = 142469, map = 42, continent = EASTERN_KINGDOMS}, -- Violet Seal of the Grand Magus
     {toy = 151016, map = 104, continent = OUTLAND}, -- Fractured Necrolyte Skull
 
+    {spell = 50977, map = 648, continent = BROKEN_ISLES}, -- Archerus (DK)
+    {spell = 126892, map = 709}, -- Temple of Five Dawns  (Monk)
+    {spell = 193759, map = 734, continent = BROKEN_ISLES}, -- Hall of the guardian (Mage)
+
     -- druid dreamwalk
-    {spell = 193753, map = 747, continent = BROKEN_ISLES},
-    {spell = 193753, map = 198, continent = KALIMDOR},
     {spell = 193753, map = 26, continent = EASTERN_KINGDOMS},
     {spell = 193753, map = 47, continent = EASTERN_KINGDOMS},
-    {spell = 193753, map = 80, continent = KALIMDOR},
     {spell = 193753, map = 69, continent = KALIMDOR},
+    {spell = 193753, map = 80, continent = KALIMDOR},
     {spell = 193753, map = 116, continent = NORTHREND},
+    {spell = 193753, map = 198, continent = KALIMDOR},
+    {spell = 193753, map = 747, continent = BROKEN_ISLES},
 
     -- mage teleports and portals
     -- https://www.wowhead.com/guide/transportation#mage-portals
@@ -123,7 +124,7 @@ ADDON.db = {
     {toy = 48933, map = 113, continent = NORTHREND}, -- Wormhole Generator: Northrend
     {toy = 87215, map = 424, continent = PANDARIA}, -- Wormhole Generator: Pandaria
     {toy = 112059, map = 572, continent = DRAENOR}, -- Wormhole Centrifuge
-    {toy = 151652, map = 994, continent = ARGUS}, -- Wormhole Generator: Argus
+    {toy = 151652, map = 994, continent = BROKEN_ISLES}, -- Wormhole Generator: Argus
     {toy = 168807, map = 992, continent = KUL_TIRAS}, -- Wormhole Generator: Kul Tiras
     {toy = 168808, map = 991, continent = ZANDALAR}, -- Wormhole Generator: Zandalar
     {toy = 172924, map = 1550, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands

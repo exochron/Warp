@@ -75,8 +75,6 @@ local function generateTeleportMenu(_, root)
     root:SetTag(ADDON_NAME.."-LDB-Teleport")
     root:SetScrollMode(GetScreenHeight() - 100)
 
-    --root:CreateTitle("Teleports")
-
     local function buildEntry(menuRoot, type, id, icon, location, tooltipSetter, hasCooldown)
         local element = menuRoot:CreateButton("|T" .. icon .. ":0|t "..location, function()
             return MenuResponse.CloseAll
@@ -231,6 +229,22 @@ local function generateTeleportMenu(_, root)
         return ""
     end
 
+    local function buildRow(row, menuRoot)
+        if row.spell then
+            buildSpellEntry(menuRoot, row.spell, GetName(row), row.portal)
+        elseif row.toy then
+            buildToyEntry(menuRoot, row.toy, GetName(row))
+        elseif row.item then
+            buildItemEntry(menuRoot, row.item, GetName(row))
+        end
+    end
+
+    local function IsKnown(row)
+        return (row.spell and IsSpellKnown(row.spell))
+                or (row.toy and PlayerHasToy(row.toy)
+                or (row.item and (C_Item.IsEquippedItem(row.item) or ADDON:PlayerHasItemInBag(row.item))))
+    end
+
     local function SortRowsByName(list)
         table.sort(list, function(a, b)
             return GetName(a) < GetName(b)
@@ -264,13 +278,27 @@ local function generateTeleportMenu(_, root)
             seasonRoot = root:CreateButton(currentSeasonName)
         end
         local seasonSpells = tFilter(ADDON.db, function(row)
-            return row.category == ADDON.Category.SeasonInstance and row.spell and IsSpellKnown(row.spell)
+            return row.category == ADDON.Category.SeasonInstance and IsKnown(row)
         end, true)
-        seasonSpells = SortRowsByName(seasonSpells)
-        for _, row in ipairs(seasonSpells) do
-            buildSpellEntry(seasonRoot, row.spell, GetRealZoneText(row.instance))
-        end
         if #seasonSpells > 0 then
+            seasonSpells = SortRowsByName(seasonSpells)
+            for _, row in ipairs(seasonSpells) do
+                buildRow(row, seasonRoot)
+            end
+            root:QueueSpacer()
+        end
+    end
+
+    -- Uncategorized (like wandering isle)
+    do
+        local list = tFilter(ADDON.db, function(row)
+            return row.continent == nil and row.category == nil and IsKnown(row)
+        end, true)
+        if #list > 0 then
+            list = SortRowsByName(list)
+            for _, row in ipairs(list) do
+                buildRow(row, root)
+            end
             root:QueueSpacer()
         end
     end
@@ -279,7 +307,7 @@ local function generateTeleportMenu(_, root)
     do
         local groupedByContinent = {}
         for _, row in ipairs(ADDON.db) do
-            if row.continent then
+            if row.continent and IsKnown(row) then
                 if not groupedByContinent[row.continent] then
                     groupedByContinent[row.continent] = {}
                 end
@@ -289,24 +317,10 @@ local function generateTeleportMenu(_, root)
         local continents = GetKeysArray(groupedByContinent)
         table.sort(continents, function(a, b) return a > b end)
         for _, continent in ipairs(continents) do
-            local list = groupedByContinent[continent]
-            list = tFilter(list, function(row)
-                return (row.spell and IsSpellKnown(row.spell))
-                        or (row.toy and PlayerHasToy(row.toy)
-                        or (row.item and (C_Item.IsEquippedItem(row.item) or ADDON:PlayerHasItemInBag(row.item))))
-            end, true)
-            if #list > 0 then
-                list = SortRowsByName(list)
-                local continentRoot = root:CreateButton(GetRealZoneText(continent))
-                for _, row in ipairs(list) do
-                    if row.spell then
-                        buildSpellEntry(continentRoot, row.spell, GetName(row), row.portal)
-                    elseif row.toy then
-                        buildToyEntry(continentRoot, row.toy, GetName(row))
-                    elseif row.item then
-                        buildItemEntry(continentRoot, row.item, GetName(row))
-                    end
-                end
+            local list = SortRowsByName(groupedByContinent[continent])
+            local continentRoot = root:CreateButton(GetRealZoneText(continent))
+            for _, row in ipairs(list) do
+                buildRow(row, continentRoot)
             end
         end
     end
