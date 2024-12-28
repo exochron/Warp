@@ -1,0 +1,15 @@
+ignore:
+    - LICENSE
+    - DevZone
+    - Images
+    - README.md
+    - CHANGELOG.md
+    - Libs/*/LICENSE
+    - Libs/*.toc
+
+license-output: LICENSE
+
+externals:
+    Libs/LibDBIcon:
+        url: https://repos.curseforge.com/wow/libdbicon-1-0/trunk
+        curse-slug: libdbicon-1-0

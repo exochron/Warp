@@ -1,0 +1,19 @@
+## Interface: 110007
+## Title: Scotty
+## Notes: Your personal transportation assistant
+## Author: eXochron
+## IconTexture: Interface\Addons\Scotty\icon.png
+## Version: @project-version@
+## SavedVariables: ScottyGlobalSettings
+## X-Curse-Project-ID: 1166725
+
+Libs\LibDBIcon\embeds.xml
+Libs\LibDBIcon\LibDBIcon-1.0\lib.xml
+
+locals.lua
+db.lua
+
+core.lua
+settings.lua
+menu-port.lua
+ldb.lua
