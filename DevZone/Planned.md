@@ -25,26 +25,8 @@
  - [x] Menu on Minimap Icon
 
 ## missing items:
-- gesegnetes medallion von karabor
 - separate wormhole generator
-- tortolianischer glücksbringer
 - race or tradeskill restriction
-
-error bei click:
-```
-Message: bad argument #1 to '?' (Usage: local result = C_Item.IsEquippableItem(itemInfo))
-Time: Mon Dec 30 13:21￼8 2024
-Count: 1
-Stack: bad argument #1 to '?' (Usage: local result = C_Item.IsEquippableItem(itemInfo))
-[string "=[C]"]: in function `IsEquippableItem'
-[string "@Interface/AddOns/Blizzard_FrameXML/Mainline/SecureTemplates.lua"]:417: in function `handler'
-[string "@Interface/AddOns/Blizzard_FrameXML/Mainline/SecureTemplates.lua"]:667: in function <...ddOns/Blizzard_FrameXML/Mainline/SecureTemplates.lua:649>
-[string "@Interface/AddOns/Blizzard_FrameXML/Mainline/SecureTemplates.lua"]:704: in function <...ddOns/Blizzard_FrameXML/Mainline/SecureTemplates.lua:702>
-[string "@Interface/AddOns/Blizzard_FrameXML/Mainline/SecureTemplates.lua"]:726: in function `SecureActionButton_OnClick'
-[string "*SecureTemplates.xml:16_OnClick"]:1: in function <[string "*SecureTemplates.xml:16_OnClick"]:1>
-
-Locals: (*temporary) = "bad argument #1 to '?' (Usage: local result = C_Item.IsEquippableItem(itemInfo))"
-```
 
 ## Adventure Journal
  - [ ] add dungeon ports on overview
