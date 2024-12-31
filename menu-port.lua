@@ -19,12 +19,12 @@ local function equip(itemId)
             end
         end, 'equipitem-'..itemId)
 
-        if not equipTicker or equipTicker:IsCancelled() then
-            local tickHandler = function()
+        if not equipTicker then
+            equipTicker = C_Timer.NewTicker(0.1, function()
                 local requestedEquip = false
 
                 for _, queuedItemId in pairs(equipQueue) do
-                    if queuedItemId then
+                    if queuedItemId and not C_Item.IsEquippedItem(queuedItemId) then
                         C_Item.EquipItemByName(queuedItemId)
                         requestedEquip = true
                         break
@@ -35,9 +35,7 @@ local function equip(itemId)
                     equipTicker:Cancel()
                     equipTicker = nil
                 end
-            end
-            tickHandler()
-            equipTicker = C_Timer.NewTicker(0.1, tickHandler, 100)
+            end)
         end
     end
 end
@@ -75,24 +73,25 @@ local function generateTeleportMenu(_, root)
     root:SetTag(ADDON_NAME.."-LDB-Teleport")
     root:SetScrollMode(GetScreenHeight() - 100)
 
-    local function buildEntry(menuRoot, type, id, icon, location, tooltipSetter, hasCooldown)
+    local function buildEntry(menuRoot, type, typeId, icon, location, tooltipSetter, hasCooldown)
         local element = menuRoot:CreateButton("|T" .. icon .. ":0|t "..location, function()
             return MenuResponse.CloseAll
         end)
         element:HookOnEnter(function(frame)
+            menuActionButton:SetScript("PreClick", function() end)
             menuActionButton:SetAttribute("type", type)
             menuActionButton:SetAttribute("typerelease", type)
-            menuActionButton:SetAttribute(type, id)
+            menuActionButton:SetAttribute(type, typeId)
+            menuActionButton:SetFrameStrata("FULLSCREEN_DIALOG")
             menuActionButton:SetParent(frame)
             menuActionButton:SetAllPoints(frame)
-            menuActionButton:SetFrameStrata("FULLSCREEN_DIALOG")
-            menuActionButton:SetFrameLevel(10000)
+            menuActionButton:Raise()
             menuActionButton:Show()
 
             GameTooltip:SetOwner(frame, "ANCHOR_NONE")
             GameTooltip:SetPoint("TOPLEFT", frame, "TOPRIGHT")
             GameTooltip:ClearLines()
-            tooltipSetter(GameTooltip, id)
+            tooltipSetter(GameTooltip)
             GameTooltip:Show()
         end)
         element:HookOnLeave(function()
@@ -114,31 +113,36 @@ local function generateTeleportMenu(_, root)
                 itemId,
                 C_Item.GetItemIconByID(itemId),
                 location,
-                GameTooltip.SetToyByItemID,
+                function(tooltip)
+                    GameTooltip.SetToyByItemID(tooltip, itemId)
+                end,
                 not C_ToyBox.IsToyUsable(itemId) or C_Container.GetItemCooldown(itemId) > 0
         )
     end
 
     local function buildItemEntry(menuRoot, itemId, location)
+        local itemLocation = C_Item.IsEquippableItem(itemId) and ADDON:GetItemSlot(itemId) or ADDON:FindItemInBags(itemId)
+
         local element = buildEntry(
                 menuRoot,
                 "item",
-                itemId,
+                itemLocation,
                 C_Item.GetItemIconByID(itemId),
                 location,
-                GameTooltip.SetItemByID,
+                function(tooltip)
+                    GameTooltip.SetItemByID(tooltip, itemId)
+                end,
                 C_Container.GetItemCooldown(itemId) > 0
         )
         if C_Item.IsEquippableItem(itemId) then
 
-            local inventorySlot = ADDON:GetItemSlot(itemId)
-            local previousEquippedItem = GetInventoryItemID("player", inventorySlot)
+            local previousEquippedItem = GetInventoryItemID("player", itemLocation)
             local currentlyClicking = false
 
             element:HookOnEnter(function()
+                equip(itemId)
                 menuActionButton:SetScript("PreClick", function()
                     currentlyClicking = true
-                    menuActionButton:SetAttribute("item", inventorySlot)
 
                     if previousEquippedItem and previousEquippedItem ~= itemId then
                         local successHandle, stopHandle
@@ -153,18 +157,11 @@ local function generateTeleportMenu(_, root)
                         stopHandle = ADDON.Events:RegisterFrameEventAndCallbackWithHandle("UNIT_SPELLCAST_STOP", reequipAfterTeleport, 'reequip-after-teleport')
                     end
                 end)
-                equip(itemId)
             end)
             element:HookOnLeave(function()
                 if not currentlyClicking then
                     equip(previousEquippedItem)
                 end
-            end)
-        else
-            element:HookOnEnter(function()
-                menuActionButton:SetScript("PreClick", function()
-                    menuActionButton:SetAttribute("item", ADDON:FindItemInBags(itemId))
-                end)
             end)
         end
 
@@ -178,7 +175,9 @@ local function generateTeleportMenu(_, root)
                 spellId,
                 C_Spell.GetSpellTexture(spellId),
                 location,
-                GameTooltip.SetSpellByID,
+                function(tooltip)
+                    GameTooltip.SetSpellByID(tooltip, spellId)
+                end,
                 not C_Spell.IsSpellUsable(spellId)
         )
 
