@@ -138,8 +138,7 @@ local function generateTeleportMenu(_, root)
             element:HookOnEnter(function()
                 menuActionButton:SetScript("PreClick", function()
                     currentlyClicking = true
-                    menuActionButton:SetAttribute("item", "")
-                    menuActionButton:SetAttribute("slot", inventorySlot)
+                    menuActionButton:SetAttribute("item", inventorySlot)
 
                     if previousEquippedItem and previousEquippedItem ~= itemId then
                         local successHandle, stopHandle
@@ -160,6 +159,12 @@ local function generateTeleportMenu(_, root)
                 if not currentlyClicking then
                     equip(previousEquippedItem)
                 end
+            end)
+        else
+            element:HookOnEnter(function()
+                menuActionButton:SetScript("PreClick", function()
+                    menuActionButton:SetAttribute("item", ADDON:FindItemInBags(itemId))
+                end)
             end)
         end
 
