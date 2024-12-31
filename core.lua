@@ -4,19 +4,63 @@ ADDON.Events = CreateFromMixins(EventRegistry)
 ADDON.Events:OnLoad()
 ADDON.Events:SetUndefinedEventsAllowed(true)
 
+local function cacheItems(onDone)
+    -- some item function (C_Item.IsEquippableItem()) might not properly work, when data is not cached.
+
+    local itemsToCheck = {}
+    for _, row in ipairs(ADDON.db) do
+        if row.item then
+            itemsToCheck[#itemsToCheck+1] = row.item
+        elseif row.toy then
+            itemsToCheck[#itemsToCheck+1] = row.toy
+        end
+    end
+    itemsToCheck = TableUtil.CopyUnique(itemsToCheck, true)
+    itemsToCheck = tFilter(itemsToCheck, function(itemId)
+        return not C_Item.IsItemDataCachedByID(itemId)
+    end, true)
+
+    local countOfUnloadedItems = #itemsToCheck
+    if 0 == countOfUnloadedItems then
+        onDone()
+        return
+    end
+
+    local itemIndex = tInvert(itemsToCheck)
+
+    ADDON.Events:RegisterFrameEventAndCallback("ITEM_DATA_LOAD_RESULT", function(_, itemId)
+        if itemIndex[itemId] then
+            countOfUnloadedItems = countOfUnloadedItems - 1
+
+            if countOfUnloadedItems == 0 then
+                onDone()
+                ADDON.Events:UnregisterFrameEventAndCallback("ITEM_DATA_LOAD_RESULT", 'async item loader')
+            end
+        end
+    end, 'async item loader')
+
+    for _, itemId in ipairs(itemsToCheck) do
+        C_Item.RequestLoadItemDataByID(itemId)
+    end
+end
+
 ADDON.Events:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, isLogin, isReload)
     if isLogin or isReload then
-        ADDON.Events:TriggerEvent("OnInit")
-        ADDON.Events:TriggerEvent("OnLogin")
-        ADDON.Events:UnregisterEvents({"OnInit", "OnLogin"})
-        ADDON.Events:UnregisterFrameEvent("PLAYER_ENTERING_WORLD")
+        -- for classic: filter db for existing items & spells
 
-        AddonCompartmentFrame:RegisterAddon({
-            text = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Title"),
-            icon = C_AddOns.GetAddOnMetadata(ADDON_NAME, "IconTexture"),
-            notCheckable = true,
-            func = ADDON.OpenSettings
-        })
+        cacheItems(function()
+            ADDON.Events:TriggerEvent("OnInit")
+            ADDON.Events:TriggerEvent("OnLogin")
+            ADDON.Events:UnregisterEvents({"OnInit", "OnLogin"})
+            ADDON.Events:UnregisterFrameEvent("PLAYER_ENTERING_WORLD")
+
+            AddonCompartmentFrame:RegisterAddon({
+                text = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Title"),
+                icon = C_AddOns.GetAddOnMetadata(ADDON_NAME, "IconTexture"),
+                notCheckable = true,
+                func = ADDON.OpenSettings
+            })
+        end)
     end
 end, "init")
 
