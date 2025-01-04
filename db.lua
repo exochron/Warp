@@ -17,6 +17,9 @@ local KHAZ_ALGAR = 2601
 
 local isAlliance = UnitFactionGroup("player") == "Alliance"
 local playerRace = UnitRace("player")
+local prof1, prof2 = GetProfessions()
+local isEngineer = prof1 and select(7, GetProfessionInfo(prof1)) == 202
+isEngineer = isEngineer or prof2 and select(7, GetProfessionInfo(prof2)) == 202
 
 ADDON.Category = {
     Hearthstone = 1,
@@ -82,7 +85,7 @@ ADDON.db = {
     {toy = 140192, map = 627, continent = BROKEN_ISLES}, -- Dalaran Hearthstone
     {toy = 142469, map = 350, continent = EASTERN_KINGDOMS}, -- Violet Seal of the Grand Magus
     {toy = 151016, map = 104, continent = OUTLAND}, -- Fractured Necrolyte Skull
-    {toy = (playerRace == "Worgen" and 211788 or nil), map = 179, continent = EASTERN_KINGDOMS}, -- Tess's Peacebloom
+    {toy = (playerRace == "Worgen" and 211788), map = 179, continent = EASTERN_KINGDOMS}, -- Tess's Peacebloom
 
     {spell = 50977, map = 648, continent = BROKEN_ISLES}, -- Archerus (DK)
     {spell = 126892, map = C_QuestLog.IsQuestFlaggedCompleted(40236) and 709 or 379}, -- Zen Pilgrimage  (Monk)
@@ -128,19 +131,44 @@ ADDON.db = {
     {spell = 446540, portal = 446534, map = 2339, continent = KHAZ_ALGAR}, -- Dornogal
 
     --engineer items
-    {toy = 18984, map = 83, continent = KALIMDOR}, -- Dimensional Ripper - Everlook
-    {toy = 18986, map = 71, continent = KALIMDOR}, -- Ultrasafe Transporter: Gadgetzan
-    {toy = 30542, map = 109, continent = OUTLAND}, -- Dimensional Ripper - Area 52
-    {toy = 30544, map = 105, continent = OUTLAND}, -- Ultrasafe Transporter: Toshley's Station
-    {toy = 48933, map = 113, continent = NORTHREND}, -- Wormhole Generator: Northrend
-    {toy = 87215, map = 424, continent = PANDARIA}, -- Wormhole Generator: Pandaria
-    {toy = 112059, map = 572, continent = DRAENOR}, -- Wormhole Centrifuge
-    {toy = 151652, map = 994, continent = BROKEN_ISLES}, -- Wormhole Generator: Argus
-    {toy = 168807, map = 992, continent = KUL_TIRAS}, -- Wormhole Generator: Kul Tiras
-    {toy = 168808, map = 991, continent = ZANDALAR}, -- Wormhole Generator: Zandalar
-    {toy = 172924, map = 1550, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
-    {toy = 198156, map = 1978, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
-    {toy = 221966, map = 2274, continent = KHAZ_ALGAR}, -- Wormhole Generator: Khaz Algar
+    {toy = isEngineer and 18984, map = 83, continent = KALIMDOR}, -- Dimensional Ripper - Everlook
+    {toy = isEngineer and 18986, map = 71, continent = KALIMDOR}, -- Ultrasafe Transporter: Gadgetzan
+    {toy = isEngineer and 30542, map = 109, continent = OUTLAND}, -- Dimensional Ripper - Area 52
+    {toy = isEngineer and 30544, map = 105, continent = OUTLAND}, -- Ultrasafe Transporter: Toshley's Station
+    {toy = isEngineer and 48933, map = 114, continent = NORTHREND}, -- Wormhole Generator: Northrend
+    {toy = isEngineer and 48933, map = 117, continent = NORTHREND}, -- Wormhole Generator: Northrend
+    {toy = isEngineer and 48933, map = 118, continent = NORTHREND}, -- Wormhole Generator: Northrend
+    {toy = isEngineer and 48933, map = 119, continent = NORTHREND}, -- Wormhole Generator: Northrend
+    {toy = isEngineer and 48933, map = 120, continent = NORTHREND}, -- Wormhole Generator: Northrend
+    {toy = isEngineer and 87215, map = 371, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 87215, map = 376, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 87215, map = 379, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 87215, map = 388, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 87215, map = 390, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 87215, map = 418, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 87215, map = 422, continent = PANDARIA}, -- Wormhole Generator: Pandaria
+    {toy = isEngineer and 112059, map = 525, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = isEngineer and 112059, map = 535, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = isEngineer and 112059, map = 539, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = isEngineer and 112059, map = 542, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = isEngineer and 112059, map = 543, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = isEngineer and 112059, map = 550, continent = DRAENOR}, -- Wormhole Centrifuge
+    {toy = isEngineer and 151652, map = 994, continent = BROKEN_ISLES}, -- Wormhole Generator: Argus
+    {toy = isEngineer and 168807, map = 992, continent = KUL_TIRAS}, -- Wormhole Generator: Kul Tiras
+    {toy = isEngineer and 168808, map = 991, continent = ZANDALAR}, -- Wormhole Generator: Zandalar
+    {toy = isEngineer and 172924, map = 1525, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = isEngineer and 172924, map = 1536, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = isEngineer and 172924, map = 1543, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = isEngineer and 172924, map = 1565, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = isEngineer and 172924, map = 1569, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = isEngineer and 172924, map = 1670, continent = SHADOWLANDS}, -- Wormhole Generator: Shadowlands
+    {toy = isEngineer and 198156, map = 2022, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = isEngineer and 198156, map = 2023, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = isEngineer and 198156, map = 2024, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = isEngineer and 198156, map = 2025, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = isEngineer and 198156, map = 2133, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = isEngineer and 198156, map = 2200, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
+    {toy = isEngineer and 221966, map = 2274, continent = KHAZ_ALGAR}, -- Wormhole Generator: Khaz Algar
 
     -- seasonal dungeon port
     {spell = 445416, instance = 2669, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- City of Threads
@@ -239,7 +267,7 @@ ADDON.db = {
     {toy = 206195, category = ADDON.Category.Hearthstone},
     {toy = 209035, category = ADDON.Category.Hearthstone},
     {toy = 208704, category = ADDON.Category.Hearthstone},
-    {toy = ((playerRace == "Draenei" or playerRace == "LightforgedDraenei") and 210455 or nil), category = ADDON.Category.Hearthstone},
+    {toy = ((playerRace == "Draenei" or playerRace == "LightforgedDraenei") and 210455), category = ADDON.Category.Hearthstone},
     {toy = 212337, category = ADDON.Category.Hearthstone},
     {toy = 228940, category = ADDON.Category.Hearthstone},
     {toy = 235016, category = ADDON.Category.Hearthstone},

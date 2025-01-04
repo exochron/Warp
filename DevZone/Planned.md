@@ -24,10 +24,6 @@
  - [x] Group by Continent
  - [x] Menu on Minimap Icon
 
-## missing items:
-- separate wormhole generator
-- race or tradeskill restriction
-
 ## Adventure Journal
  - [ ] add dungeon ports on overview
  - [ ] add dungeon port on instance view
