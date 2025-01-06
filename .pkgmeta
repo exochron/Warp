@@ -10,7 +10,7 @@ ignore:
 license-output: LICENSE
 
 tools-used:
-    - gallery-generator9
+    - gallery-generator
 
 externals:
     Libs/LibDBIcon:
