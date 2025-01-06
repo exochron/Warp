@@ -23,9 +23,9 @@ local function equip(itemId)
             equipTicker = C_Timer.NewTicker(0.1, function()
                 local requestedEquip = false
 
-                for _, queuedItemId in pairs(equipQueue) do
+                for queuedSlot, queuedItemId in pairs(equipQueue) do
                     if queuedItemId and not C_Item.IsEquippedItem(queuedItemId) then
-                        C_Item.EquipItemByName(queuedItemId)
+                        C_Item.EquipItemByName(queuedItemId, queuedSlot)
                         requestedEquip = true
                         break
                     end
