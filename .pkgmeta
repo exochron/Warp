@@ -9,6 +9,9 @@ ignore:
 
 license-output: LICENSE
 
+tools-used:
+    - gallery-generator9
+
 externals:
     Libs/LibDBIcon:
         url: https://repos.curseforge.com/wow/libdbicon-1-0/trunk

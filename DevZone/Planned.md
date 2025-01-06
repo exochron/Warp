@@ -3,7 +3,7 @@
  - [x] CI/Packager
  - [x] CF Project
  - [ ] WaGo Project (later)
- - [ ] Screenshots
+ - [x] Screenshots
  - [x] Localization
  - [x] Settings
  - [x] Settings Panel

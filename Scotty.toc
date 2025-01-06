@@ -2,7 +2,7 @@
 ## Title: Scotty
 ## Notes: Your personal transportation assistant
 ## Author: eXochron
-## IconTexture: Interface\Addons\Scotty\icon.png
+## IconTexture: Interface\Addons\Scotty\Images\icon.png
 ## Version: @project-version@
 ## SavedVariables: ScottyGlobalSettings
 ## X-Curse-Project-ID: 1166725
@@ -17,3 +17,7 @@ core.lua
 settings.lua
 menu-port.lua
 ldb.lua
+
+#@do-not-package@
+DevZone\Screenshot.lua
+#@end-do-not-package@
