@@ -46,8 +46,8 @@ end
 
 ADDON.Events:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, isLogin, isReload)
     if isLogin or isReload then
-        -- for classic: filter db for existing items & spells
 
+        ADDON:InitDatabase()
         cacheItems(function()
             ADDON.Events:TriggerEvent("OnInit")
             ADDON.Events:TriggerEvent("OnLogin")

@@ -5,7 +5,6 @@ local function buildHearthstoneButton()
     local button = CreateFrame("Button", ADDON_NAME.."HearthstoneButton", nil, "SecureActionButtonTemplate")
 
     local function GetRandomHearthstoneToy()
-        --todo check for race restrictions
         local stones = tFilter(ADDON.db, function(row)
             return row.category == ADDON.Category.Hearthstone and row.toy and PlayerHasToy(row.toy)
         end, true)
