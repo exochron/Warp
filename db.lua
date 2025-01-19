@@ -79,6 +79,7 @@ function ADDON:InitDatabase()
         {item = 138448, map = 627, continent = BROKEN_ISLES}, -- Emblem of Margoss
         {item = 139590, map = 25, continent = EASTERN_KINGDOMS}, -- Scroll of Teleport: Ravenholdt
         {item = 139599, map = 627, continent = BROKEN_ISLES}, -- Empowered Ring of the Kirin Tor
+        {item = 142469, map = 350, continent = EASTERN_KINGDOMS}, -- Violet Seal of the Grand Magus
         {item = 144391, map = 500, continent = EASTERN_KINGDOMS}, -- Pugilist's Powerful Punching Ring
         {item = 144392, map = 503, continent = KALIMDOR}, -- Pugilist's Powerful Punching Ring
         {item = 166559, map = 1165, continent = ZANDALAR}, -- Commander's Signet of Battle
@@ -87,7 +88,6 @@ function ADDON:InitDatabase()
         {item = 219222, map = 554, continent = PANDARIA}, -- Time-Lost Artifact
         {toy = 110560, map = (isAlliance and 582 or 590), continent = DRAENOR}, -- Garrison Hearthstone
         {toy = 140192, map = 627, continent = BROKEN_ISLES}, -- Dalaran Hearthstone
-        {toy = 142469, map = 350, continent = EASTERN_KINGDOMS}, -- Violet Seal of the Grand Magus
         {toy = 151016, map = 104, continent = OUTLAND}, -- Fractured Necrolyte Skull
         {toy = (playerRace == "Worgen" and 211788), map = 179, continent = EASTERN_KINGDOMS}, -- Tess's Peacebloom
 
