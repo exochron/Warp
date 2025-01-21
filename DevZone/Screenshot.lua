@@ -12,6 +12,10 @@ function Scotty_TakeScreenshots()
                 local menuChildren = { Menu.GetManager():GetOpenMenu():GetChildren() }
                 api:Point(menuChildren[18]) -- Broken Isles
             end,
+            function(api)
+                api:BackScreen()
+                ADDON:OpenSettings()
+            end,
         }
     )
 end

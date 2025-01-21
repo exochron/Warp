@@ -14,7 +14,7 @@
 ## LDB
  - [x] LeftClick uses Hearthstone
  - [x] Randomize Hearthstone
- - [ ] select fixed hearthstone
+ - [x] select fixed hearthstone
  - [x] grey out hearthstone/spells on CD
  - [x] Hearthstones
  - [x] Mage: TP and Portal together
