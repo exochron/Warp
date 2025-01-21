@@ -13,6 +13,8 @@ Libs\LibDBIcon\LibDBIcon-1.0\lib.xml
 locals.lua
 db.lua
 
+templates.xml
+setting-multiselect.lua
 core.lua
 settings.lua
 menu-port.lua
