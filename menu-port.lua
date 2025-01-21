@@ -277,7 +277,7 @@ local function generateTeleportMenu(_, root)
     -- season dungeons
     do
         local seasonRoot = root
-        if ADDON.settings.groupSeason then
+        if Settings.GetValue(ADDON_NAME.."_GROUP_SEASON") then
             local currentSeasonName = EJ_GetTierInfo(EJ_GetNumTiers())
             seasonRoot = root:CreateButton(currentSeasonName)
         end

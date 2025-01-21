@@ -130,5 +130,9 @@ ADDON.Events:RegisterCallback("OnLogin", function()
 
     local icon = LibStub("LibDBIcon-1.0")
     icon:Register(ADDON_NAME, ldbDataObject, ScottyGlobalSettings.minimap)
+    Settings.SetOnValueChangedCallback(ADDON_NAME.."_MINIMAP", function(_, _, value)
+        ScottyGlobalSettings.minimap.hide = not value
+        icon:Refresh(ADDON_NAME, ScottyGlobalSettings.minimap)
+    end, ADDON_NAME.."-ldb")
 
 end, "ldb-plugin")
