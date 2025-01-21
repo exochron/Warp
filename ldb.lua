@@ -10,6 +10,14 @@ local function buildHearthstoneButton()
         end, true)
         stones = TableUtil.Transform(stones, function(row) return row.toy end)
 
+        local preferedToys = Settings.GetValue(ADDON_NAME.."_HEARTHSTONES")
+        if #preferedToys > 0 then
+            preferedToys = CopyValuesAsKeys(preferedToys)
+            stones = tFilter(stones, function(toyId)
+                return preferedToys[toyId]
+            end, true)
+        end
+
         -- avoid last used hearthstone
         if #stones > 1 and button:GetAttribute("toy") then
             local skipToy = button:GetAttribute("toy")
@@ -76,6 +84,9 @@ ADDON.Events:RegisterCallback("OnLogin", function()
     local ldb = LibStub("LibDataBroker-1.1")
 
     hearthstoneButton = buildHearthstoneButton()
+    Settings.SetOnValueChangedCallback(ADDON_NAME.."_HEARTHSTONES", function()
+        hearthstoneButton:ShuffleHearthstone()
+    end, ADDON_NAME.."-ldb")
 
     local menu
     local hearthstoneItem = hearthstoneButton:GetAttribute("toy") or hearthstoneButton:GetAttribute("item")
