@@ -19,6 +19,10 @@ function ADDON:InitDatabase()
     local DRAGON_ISLES = 2444
     local KHAZ_ALGAR = 2601
 
+    local WW_S1 = 24
+    local WW_S2 = 25
+    local currentSeason = C_SeasonInfo and C_SeasonInfo.GetCurrentDisplaySeasonID() or 0
+
     local isAlliance = UnitFactionGroup("player") == "Alliance"
     local playerRace = UnitRace("player")
     local prof1, prof2 = GetProfessions()
@@ -175,19 +179,26 @@ function ADDON:InitDatabase()
         {toy = isEngineer and 221966, map = 2274, continent = KHAZ_ALGAR}, -- Wormhole Generator: Khaz Algar
 
         -- seasonal dungeon port
-        {spell = 445416, instance = 2669, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- City of Threads
-        {spell = 445417, instance = 2660, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- Ara Kara: City of Echoes
-        {spell = 354464, instance = 2290, continent = SHADOWLANDS, category = ADDON.Category.SeasonInstance}, -- Mists of Tirna Scithe
-        {spell = 445418, instance = 1822, continent = KUL_TIRAS, category = ADDON.Category.SeasonInstance}, -- Siege of Boralus
-        {spell = 464256, instance = 1822, continent = KUL_TIRAS, category = ADDON.Category.SeasonInstance}, -- Siege of Boralus
-        {spell = 445414, instance = 2662, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- The Dawnbreaker
-        {spell = 445269, instance = 2652, continent = KHAZ_ALGAR, category = ADDON.Category.SeasonInstance}, -- Stonevault
-        {spell = 445424, instance = 670, continent = EASTERN_KINGDOMS, category = ADDON.Category.SeasonInstance}, -- Grim Batol
-        {spell = 354462, instance = 2286, continent = SHADOWLANDS, category = ADDON.Category.SeasonInstance}, -- Necrotic Wake
-        {spell = 445444, instance = 2649, continent = KHAZ_ALGAR}, -- Priory of the Sacred Flame
-        {spell = 445440, instance = 2661, continent = KHAZ_ALGAR}, -- Cinderbrew Meadery
-        {spell = 445441, instance = 2651, continent = KHAZ_ALGAR}, -- Darkflame Cleft
-        {spell = 445443, instance = 2648, continent = KHAZ_ALGAR}, -- The Rookery
+        {spell = 445416, instance = 2669, continent = KHAZ_ALGAR, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- City of Threads
+        {spell = 445417, instance = 2660, continent = KHAZ_ALGAR, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Ara Kara: City of Echoes
+        {spell = 354464, instance = 2290, continent = SHADOWLANDS, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Mists of Tirna Scithe
+        {spell = 445418, instance = 1822, continent = KUL_TIRAS, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Siege of Boralus
+        {spell = 464256, instance = 1822, continent = KUL_TIRAS, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Siege of Boralus
+        {spell = 445414, instance = 2662, continent = KHAZ_ALGAR, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- The Dawnbreaker
+        {spell = 445269, instance = 2652, continent = KHAZ_ALGAR, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Stonevault
+        {spell = 445424, instance = 670, continent = EASTERN_KINGDOMS, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Grim Batol
+        {spell = 354462, instance = 2286, continent = SHADOWLANDS, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Necrotic Wake
+
+        {spell = 354467, instance = 2293, continent = SHADOWLANDS, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Theater of Pain
+        {spell = 373274, instance = 2097, continent = KUL_TIRAS, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Operation: Mechagon
+        {spell = 445441, instance = 2651, continent = KHAZ_ALGAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Darkflame Cleft
+        {spell = 445443, instance = 2648, continent = KHAZ_ALGAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- The Rookery
+        {spell = 445444, instance = 2649, continent = KHAZ_ALGAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Priory of the Sacred Flame
+        {spell = 445440, instance = 2661, continent = KHAZ_ALGAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Cinderbrew Meadery
+        {spell = 467546, instance = 2661, continent = KHAZ_ALGAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Cinderbrew Meadery
+        {spell = 1216786, instance = 2773, continent = KHAZ_ALGAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- Operation: Floodgate
+        {spell = 467553, instance = 1594, continent = ZANDALAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- The MOTHERLODE
+        {spell = 467555, instance = 1594, continent = ZANDALAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- The MOTHERLODE
 
         -- older dungeon portsc
         {spell = 131204, instance = 960, continent = PANDARIA}, -- Temple of the Jade Serpent
@@ -210,7 +221,6 @@ function ADDON:InitDatabase()
         {spell = 354463, instance = 2289, continent = SHADOWLANDS}, -- Plaguefall
         {spell = 354465, instance = 2287, continent = SHADOWLANDS}, -- Halls of Atonement
         {spell = 354466, instance = 2285, continent = SHADOWLANDS}, -- Spires of Ascension
-        {spell = 354467, instance = 2293, continent = SHADOWLANDS}, -- Theater of Pain
         {spell = 354468, instance = 2291, continent = SHADOWLANDS}, -- De Other Side
         {spell = 354469, instance = 2284, continent = SHADOWLANDS}, -- Sanguine Depths
         {spell = 367416, instance = 2441, continent = SHADOWLANDS}, -- Tazavesh the Veiled Market
@@ -218,7 +228,6 @@ function ADDON:InitDatabase()
         {spell = 373191, instance = 2450, continent = SHADOWLANDS}, -- Sanctum of Domination
         {spell = 373192, instance = 2481, continent = SHADOWLANDS}, -- Sepulcher of the First Ones
         {spell = 373262, instance = 532, continent = EASTERN_KINGDOMS}, -- Karazhan
-        {spell = 373274, instance = 2097, continent = KUL_TIRAS}, -- Operation: Mechagon
         {spell = 393222, instance = 2451, continent = EASTERN_KINGDOMS}, -- Uldaman: Legacy of Tyr
         {spell = 393256, instance = 2521, continent = DRAGON_ISLES}, -- Ruby Life Pools
         {spell = 393262, instance = 2516, continent = DRAGON_ISLES}, -- The Nokhud Offensive

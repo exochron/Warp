@@ -276,15 +276,15 @@ local function generateTeleportMenu(_, root)
 
     -- season dungeons
     do
-        local seasonRoot = root
-        if Settings.GetValue(ADDON_NAME.."_GROUP_SEASON") then
-            local currentSeasonName = EJ_GetTierInfo(EJ_GetNumTiers())
-            seasonRoot = root:CreateButton(currentSeasonName)
-        end
         local seasonSpells = tFilter(ADDON.db, function(row)
             return row.category == ADDON.Category.SeasonInstance and IsKnown(row)
         end, true)
         if #seasonSpells > 0 then
+            local seasonRoot = root
+            if Settings.GetValue(ADDON_NAME.."_GROUP_SEASON") then
+                local currentSeasonName = EJ_GetTierInfo(EJ_GetNumTiers())
+                seasonRoot = root:CreateButton(currentSeasonName)
+            end
             seasonSpells = SortRowsByName(seasonSpells)
             for _, row in ipairs(seasonSpells) do
                 buildRow(row, seasonRoot)
