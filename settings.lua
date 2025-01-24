@@ -13,7 +13,9 @@ local function registerSettings()
 
     local groupSeasonSetting = Settings.RegisterAddOnSetting(category, ADDON_NAME.."_GROUP_SEASON", "groupSeason",
             ScottyGlobalSettings, Settings.VarType.Boolean, L.SETTING_GROUP_SEASON, Settings.Default.False)
-    Settings.CreateCheckbox(category, groupSeasonSetting)
+    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then -- no seasons in classic yet
+        Settings.CreateCheckbox(category, groupSeasonSetting)
+    end
 
     local function HearthstoneOptions()
         local container = Settings.CreateControlTextContainer();

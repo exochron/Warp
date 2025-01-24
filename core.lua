@@ -4,6 +4,16 @@ ADDON.Events = CreateFromMixins(EventRegistry)
 ADDON.Events:OnLoad()
 ADDON.Events:SetUndefinedEventsAllowed(true)
 
+if true == C_Item.DoesItemExistByID(1) then
+    ADDON.DoesItemExistInGame = function(itemId)
+        return C_Item.GetItemIconByID(itemId) ~= 134400 -- question icon
+    end
+else
+    ADDON.DoesItemExistInGame = function(itemId)
+        return C_Item.DoesItemExistByID(itemId)
+    end
+end
+
 local function cacheItems(onDone)
     -- some item function (C_Item.IsEquippableItem()) might not properly work, when data is not cached.
 
@@ -17,7 +27,7 @@ local function cacheItems(onDone)
     end
     itemsToCheck = TableUtil.CopyUnique(itemsToCheck, true)
     itemsToCheck = tFilter(itemsToCheck, function(itemId)
-        return not C_Item.IsItemDataCachedByID(itemId)
+        return ADDON.DoesItemExistInGame(itemId) and not C_Item.IsItemDataCachedByID(itemId)
     end, true)
 
     local countOfUnloadedItems = #itemsToCheck
@@ -54,12 +64,14 @@ ADDON.Events:RegisterFrameEventAndCallback("PLAYER_ENTERING_WORLD", function(_, 
             ADDON.Events:UnregisterEvents({"OnInit", "OnLogin"})
             ADDON.Events:UnregisterFrameEvent("PLAYER_ENTERING_WORLD")
 
-            AddonCompartmentFrame:RegisterAddon({
-                text = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Title"),
-                icon = C_AddOns.GetAddOnMetadata(ADDON_NAME, "IconTexture"),
-                notCheckable = true,
-                func = ADDON.OpenSettings
-            })
+            if AddonCompartmentFrame then
+                AddonCompartmentFrame:RegisterAddon({
+                    text = C_AddOns.GetAddOnMetadata(ADDON_NAME, "Title"),
+                    icon = C_AddOns.GetAddOnMetadata(ADDON_NAME, "IconTexture"),
+                    notCheckable = true,
+                    func = ADDON.OpenSettings
+                })
+            end
         end)
     end
 end, "init")

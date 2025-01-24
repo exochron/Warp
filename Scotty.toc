@@ -1,4 +1,4 @@
-## Interface: 110007, 110100
+## Interface: 110007, 110100, 40401
 ## Title: Scotty
 ## Notes: Your personal transportation assistant
 ## Author: eXochron
@@ -22,4 +22,5 @@ ldb.lua
 
 #@do-not-package@
 DevZone\Screenshot.lua
+DevZone\Tests.lua
 #@end-do-not-package@
