@@ -244,9 +244,12 @@ local function generateTeleportMenu(_, root)
     end
 
     local function IsKnown(row)
-        return (row.spell and IsSpellKnown(row.spell))
+        return (nil == row.quest or C_QuestLog.IsQuestFlaggedCompleted(row.quest))
+            and (
+                (row.spell and IsSpellKnown(row.spell))
                 or (row.toy and PlayerHasToy(row.toy)
                 or (row.item and (C_Item.IsEquippedItem(row.item) or ADDON:PlayerHasItemInBag(row.item))))
+            )
     end
 
     local function SortRowsByName(list)
