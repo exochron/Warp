@@ -24,7 +24,11 @@ local function buildHearthstoneButton()
             stones = tFilter(stones, function(v) return v ~= skipToy end, true)
         end
 
-        return GetRandomArrayEntry(stones)
+        if #stones > 0 then
+            return GetRandomArrayEntry(stones)
+        end
+
+        return nil
     end
     button.ShuffleHearthstone = function(self)
         local toy = GetRandomHearthstoneToy()
@@ -33,6 +37,7 @@ local function buildHearthstoneButton()
             self:SetAttribute("typerelease", "toy")
             self:SetAttribute("toy", toy)
             self:SetAttribute("item", nil)
+            self:SetAttribute("itemID", nil)
             self:SetAttribute("spell", nil)
             return
         end
@@ -43,14 +48,17 @@ local function buildHearthstoneButton()
             self:SetAttribute("typerelease", "spell")
             self:SetAttribute("spell", AstralRecall)
             self:SetAttribute("item", nil)
+            self:SetAttribute("itemID", nil)
             self:SetAttribute("toy", nil)
         end
 
-        local item = C_Container.PlayerHasHearthstone and C_Container.PlayerHasHearthstone() or PlayerHasHearthstone()
+        local item = C_Container.PlayerHasHearthstone and C_Container.PlayerHasHearthstone()
+                or ADDON:FindItemInBags(HEARTHSTONE_ITEM_ID) and HEARTHSTONE_ITEM_ID
         if item then
             self:SetAttribute("type", "item")
             self:SetAttribute("typerelease", "item")
-            self:SetAttribute("item", item)
+            self:SetAttribute("item", ADDON:FindItemInBags(item))
+            self:SetAttribute("itemID", item)
             self:SetAttribute("toy", nil)
             self:SetAttribute("spell", nil)
         end
@@ -89,7 +97,7 @@ ADDON.Events:RegisterCallback("OnLogin", function()
     end, ADDON_NAME.."-ldb")
 
     local menu
-    local hearthstoneItem = hearthstoneButton:GetAttribute("toy") or hearthstoneButton:GetAttribute("item")
+    local hearthstoneItem = hearthstoneButton:GetAttribute("toy") or hearthstoneButton:GetAttribute("itemID")
     local ldbDataObject = ldb:NewDataObject( ADDON_NAME, {
         type = "data source",
         text = GetBindLocation(),
@@ -118,7 +126,7 @@ ADDON.Events:RegisterCallback("OnLogin", function()
     } )
 
     hearthstoneButton:HookScript("OnAttributeChanged", function(_, name, value)
-        if value and (name == "toy" or name == "item") then
+        if value and (name == "toy" or name == "itemID") then
             ldbDataObject.label = C_Item.GetItemNameByID(value)
             ldbDataObject.icon = C_Item.GetItemIconByID(value)
         end

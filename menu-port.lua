@@ -268,8 +268,8 @@ local function generateTeleportMenu(_, root)
         elseif hearthstoneButton:GetAttribute("spell") then
             buildSpellEntry(root, hearthstoneButton:GetAttribute("spell"), GetBindLocation())
             root:QueueSpacer()
-        elseif hearthstoneButton:GetAttribute("item") then
-            buildItemEntry(root, hearthstoneButton:GetAttribute("item"), GetBindLocation())
+        elseif hearthstoneButton:GetAttribute("itemID") then
+            buildItemEntry(root, hearthstoneButton:GetAttribute("itemID"), GetBindLocation())
             root:QueueSpacer()
         end
     end

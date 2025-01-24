@@ -8,8 +8,8 @@
  - [x] Settings
  - [x] Settings Panel
  - [x] Addon Compartment
- - [ ] Cataclysm Support
- - [ ] Classic Support
+ - [x] Cataclysm Support
+ - [ ] Classic Support ?
 
 ## LDB
  - [x] LeftClick uses Hearthstone
