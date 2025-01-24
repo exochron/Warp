@@ -36,10 +36,8 @@ function ADDON:InitDatabase()
         SeasonInstance = 2,
     }
 
-    --todo: Mole Machine https://www.wowhead.com/spell=265225/mole-machine#comments
-
     local db = {
-        --various items
+        -- Various Items and Toys
         {item = 21711, map = isClassic and 1450 or 80, continent = KALIMDOR}, -- Lunar Festival Invitation
         {item = 22589, map = 350, continent = EASTERN_KINGDOMS}, -- Atiesh, Greatstaff of the Guardian
         {item = 22630, map = 350, continent = EASTERN_KINGDOMS}, -- Atiesh, Greatstaff of the Guardian
@@ -104,7 +102,7 @@ function ADDON:InitDatabase()
         {spell = 126892, map = C_QuestLog.IsQuestFlaggedCompleted(40236) and 709 or 379}, -- Zen Pilgrimage  (Monk)
         {spell = 193759, map = 734, continent = BROKEN_ISLES}, -- Hall of the guardian (Mage)
 
-        -- druid dreamwalk
+        -- Druid Dreamwalk
         {spell = 18960, map = isClassic and 1450 or 80, continent = KALIMDOR},
         {spell = 193753, map = 26, continent = EASTERN_KINGDOMS},
         {spell = 193753, map = 47, continent = EASTERN_KINGDOMS},
@@ -114,7 +112,7 @@ function ADDON:InitDatabase()
         {spell = 193753, map = 198, continent = KALIMDOR},
         {spell = 193753, map = 747, continent = BROKEN_ISLES},
 
-        -- mage teleports and portals
+        -- Mage Teleports with Portals
         -- https://www.wowhead.com/guide/transportation#mage-portals
         {spell = 3561, portal = 10059, map = isClassic and 1453 or 84, continent = EASTERN_KINGDOMS}, -- Stormwind
         {spell = 3562, portal = 11416, map = isClassic and 1455 or 87, continent = EASTERN_KINGDOMS}, -- Ironforge
@@ -143,7 +141,41 @@ function ADDON:InitDatabase()
         {spell = 395277, portal = 395289, map = 2134, continent = DRAGON_ISLES}, -- Valdraken
         {spell = 446540, portal = 446534, map = 2339, continent = KHAZ_ALGAR}, -- Dornogal
 
-        --engineer items
+        -- Mole Machine of Dark Iron Dwarfes
+        -- from https://www.wowhead.com/spell=265225/mole-machine#comments:id=2579704 Kudos to P3lim
+        {spell = 265225, map = isClassic and 1455 or 87, continent = EASTERN_KINGDOMS}, -- Ironforge
+        {spell = 265225, map = isClassic and 1453 or 84, continent = EASTERN_KINGDOMS}, -- Stormwind
+        {spell = 265225, map = 243, continent = EASTERN_KINGDOMS}, -- Shadowforge City
+        {spell = 265225, quest = 53594, map = 17, continent = EASTERN_KINGDOMS}, -- Blasted Lands
+        {spell = 265225, quest = 53585, map = 26, continent = EASTERN_KINGDOMS}, -- The Hinterlands
+        {spell = 265225, quest = 53587, map = 35, continent = EASTERN_KINGDOMS}, -- Blackrock Mountain
+        {spell = 265225, quest = 53591, map = 78, continent = KALIMDOR}, -- Un'Goro Crater
+        {spell = 265225, quest = 53601, map = 198, continent = KALIMDOR}, -- Mount Hyjal
+        {spell = 265225, quest = 53600, map = 199, continent = KALIMDOR}, -- Southern Barrens
+        {spell = 265225, quest = 53592, map = 100, continent = OUTLAND}, -- Hellfire Peninsula
+        {spell = 265225, quest = 53599, map = 104, continent = OUTLAND}, -- Shadowmoon Valley
+        {spell = 265225, quest = 53597, map = 105, continent = OUTLAND}, -- Blade's Edge Mountains
+        {spell = 265225, quest = 53586, map = 118, continent = NORTHREND}, -- Icecrown
+        {spell = 265225, quest = 53596, map = 115, continent = NORTHREND}, -- Dragonblight
+        {spell = 265225, quest = 53595, map = 379, continent = PANDARIA}, -- Kun-Lai Summit
+        {spell = 265225, quest = 53598, map = 376, continent = PANDARIA}, -- Valley of the Four Winds
+        {spell = 265225, quest = 53588, map = 543, continent = DRAENOR}, -- Gorgond
+        {spell = 265225, quest = 53590, map = 550, continent = DRAENOR}, -- Nagrand
+        {spell = 265225, quest = 53593, map = 650, continent = BROKEN_ISLES}, -- Highmountain
+        {spell = 265225, quest = 53589, map = 646, continent = BROKEN_ISLES}, -- Broken Shore
+        {spell = 265225, quest = 80099, map = 863, continent = ZANDALAR}, -- Nazmir
+        {spell = 265225, quest = 80100, map = 862, continent = ZANDALAR}, -- Zuldazar
+        {spell = 265225, quest = 80101, map = 895, continent = KUL_TIRAS}, -- Tiragarde Sound
+        {spell = 265225, quest = 80102, map = 942, continent = KUL_TIRAS}, -- Stormsong Valley
+        {spell = 265225, quest = 80103, map = 1536, continent = SHADOWLANDS}, -- Maldraxxus
+        {spell = 265225, quest = 80104, map = 1525, continent = SHADOWLANDS}, -- Revendreth
+        {spell = 265225, quest = 80105, map = 1533, continent = SHADOWLANDS}, -- Bastion
+        {spell = 265225, quest = 80106, map = 1565, continent = SHADOWLANDS}, -- Ardenweald
+        {spell = 265225, quest = 80107, map = 2022, continent = DRAGON_ISLES}, -- Waking Shores
+        {spell = 265225, quest = 80108, map = 2024, continent = DRAGON_ISLES}, -- Azure Span
+        {spell = 265225, quest = 80109, map = 2133, continent = DRAGON_ISLES}, -- Zaralek Cavern
+
+        -- Engineering Items
         {toy = isEngineer and 18984, map = isClassic and 1452 or 83, continent = KALIMDOR}, -- Dimensional Ripper - Everlook
         {toy = isEngineer and 18986, map = isClassic and 1446 or 71, continent = KALIMDOR}, -- Ultrasafe Transporter: Gadgetzan
         {toy = isEngineer and 30542, map = isClassic and 1953 or 109, continent = OUTLAND}, -- Dimensional Ripper - Area 52
@@ -183,7 +215,7 @@ function ADDON:InitDatabase()
         {toy = isEngineer and 198156, map = 2200, continent = DRAGON_ISLES}, -- Wormhole Generator: Dragon Isles
         {toy = isEngineer and 221966, map = 2274, continent = KHAZ_ALGAR}, -- Wormhole Generator: Khaz Algar
 
-        -- seasonal dungeon port
+        -- Seasonal Dungeon Port
         {spell = 445416, instance = 2669, continent = KHAZ_ALGAR, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- City of Threads
         {spell = 445417, instance = 2660, continent = KHAZ_ALGAR, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Ara Kara: City of Echoes
         {spell = 354464, instance = 2290, continent = SHADOWLANDS, category = (currentSeason == WW_S1 and ADDON.Category.SeasonInstance)}, -- Mists of Tirna Scithe
@@ -205,7 +237,7 @@ function ADDON:InitDatabase()
         {spell = 467553, instance = 1594, continent = ZANDALAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- The MOTHERLODE
         {spell = 467555, instance = 1594, continent = ZANDALAR, category = (currentSeason == WW_S2 and ADDON.Category.SeasonInstance)}, -- The MOTHERLODE
 
-        -- older dungeon portsc
+        -- Older Dungeon Ports
         {spell = 131204, instance = 960, continent = PANDARIA}, -- Temple of the Jade Serpent
         {spell = 131205, instance = 961, continent = PANDARIA}, -- Stormstout Brewery
         {spell = 131206, instance = 959, continent = PANDARIA}, -- Shado-Pan Monastery
@@ -257,7 +289,7 @@ function ADDON:InitDatabase()
         {spell = 432257, instance = 2569, continent = DRAGON_ISLES}, -- Aberrus
         {spell = 432258, instance = 2549, continent = DRAGON_ISLES}, -- Amirdrassil, the Dream's Hope
 
-        -- hearthstones
+        -- Hearthstones
         {spell = 556, category = ADDON.Category.Hearthstone}, -- Astral Recall (shaman)
         {toy = 54452, category = ADDON.Category.Hearthstone},
         {toy = 64488, category = ADDON.Category.Hearthstone},
